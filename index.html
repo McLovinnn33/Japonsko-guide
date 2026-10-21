@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Japonsko guide</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Figtree:wght@400;500;600;700;800&display=swap">
+<meta name="theme-color" content="#d7263d">
+<meta name="description" content="Moje tipy z Japonska s linkami do Google Maps.">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Japonsko">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<style>:root{padding-top:env(safe-area-inset-top,0px)}img{max-width:100%}[hidden]{display:none!important}
+/* Layout: jedna mobilna appka, spodna navigacia ako vo vlaku; trasy kreslene ako linky metra, miesta maju "stanicne kody" (SH-03) */
+:root{
+  --bg:#f3f1ec; --surface:#ffffff; --ink:#1b1d22; --muted:#6a6e78; --line:#e2dfd7;
+  --red:#d7263d; --red-soft:#fbe4e6; --chip:#eceae3; --gold:#b8860b;
+  --tokyo:#2f9e44; --kyoto:#7b4fd6; --osaka:#e8590c; --nara:#1c7ed6; --kamakura:#0b8a8a;
+  --shadow:0 1px 2px rgba(27,29,34,.06),0 4px 14px rgba(27,29,34,.06);
+  --display:"Dela Gothic One","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#121317; --surface:#1c1e24; --ink:#eceae4; --muted:#9a9ea8; --line:#2c2f37;
+  --red:#ff5468; --red-soft:#3a1d22; --chip:#262931; --gold:#e0b343;
+  --tokyo:#51cf66; --kyoto:#a98bff; --osaka:#ff922b; --nara:#4dabf7; --kamakura:#38d9a9;
+  --shadow:0 1px 2px rgba(0,0,0,.4); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121317; --surface:#1c1e24; --ink:#eceae4; --muted:#9a9ea8; --line:#2c2f37;
+  --red:#ff5468; --red-soft:#3a1d22; --chip:#262931; --gold:#e0b343;
+  --tokyo:#51cf66; --kyoto:#a98bff; --osaka:#ff922b; --nara:#4dabf7; --kamakura:#38d9a9;
+  --shadow:0 1px 2px rgba(0,0,0,.4); color-scheme:dark}
+
+*{box-sizing:border-box}
+html,body{background:var(--bg)}
+body{margin:0;color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;-webkit-tap-highlight-color:transparent}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+button{font:inherit;color:inherit}
+a{color:inherit}
+.wrap{max-width:720px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 calc(96px + env(safe-area-inset-bottom,0px))}
+
+/* hlavicka */
+.hero{padding-block:22px 6px;display:flex;flex-direction:column;gap:6px}
+.hero .kanji{font-family:var(--display);color:var(--red);font-size:13px;letter-spacing:.3em}
+.hero h1{font-family:var(--display);font-weight:400;font-size:clamp(30px,8vw,44px);line-height:1.05;margin:0;text-wrap:balance}
+.hero p{margin:0;color:var(--muted);max-width:60ch}
+.stats{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.stats b{color:var(--ink)}
+
+/* mesta */
+.cities{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);padding-block:10px 8px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin-inline:-4px;padding-inline:4px}
+.cities::-webkit-scrollbar{display:none}
+.city{flex:0 0 auto;border:0;background:var(--chip);border-radius:999px;padding:8px 14px 8px 10px;display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:700;font-size:14px}
+.city .dot{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;color:#fff;font-family:var(--display);font-size:11px;background:var(--c)}
+.city[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.city .n{font-weight:500;opacity:.6;font-size:12px}
+
+/* filtre */
+.filters{display:flex;flex-direction:column;gap:8px;padding-block:4px 12px}
+.row{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.row::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:6px 10px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.chip[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:var(--bg)}
+.chip.area{border-left:4px solid var(--c)}
+.search{display:flex;gap:8px}
+.search input{flex:1;min-width:0;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 12px;font:inherit;color:var(--ink)}
+.near{border:0;background:var(--red);color:#fff;border-radius:12px;padding:0 14px;font-weight:700;cursor:pointer;white-space:nowrap}
+
+/* sekcie */
+.areahead{display:flex;align-items:baseline;gap:10px;margin:22px 0 10px}
+.areahead .code{font-family:var(--display);color:#fff;background:var(--c);border-radius:6px;padding:2px 7px;font-size:13px}
+.areahead h2{margin:0;font-size:20px;font-weight:800;letter-spacing:-.01em}
+.areahead .cnt{color:var(--muted);font-size:13px;margin-left:auto}
+.list{display:flex;flex-direction:column;gap:10px}
+
+/* karta miesta */
+.card{background:var(--surface);border-radius:16px;box-shadow:var(--shadow);padding:14px;display:flex;flex-direction:column;gap:10px;scroll-margin-top:80px}
+.card.flash{outline:3px solid var(--red);outline-offset:2px}
+.top{display:flex;gap:12px;align-items:flex-start}
+.emo{flex:0 0 44px;height:44px;border-radius:12px;background:var(--chip);display:grid;place-items:center;font-size:22px}
+.ttl{flex:1;min-width:0}
+.ttl h3{margin:0;font-size:16.5px;line-height:1.25;font-weight:800}
+.meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:4px;font-size:12px;color:var(--muted)}
+.st{font-family:var(--display);font-size:11px;color:var(--c);border:1.5px solid var(--c);border-radius:5px;padding:0 5px;line-height:17px}
+.tag{background:var(--chip);border-radius:6px;padding:1px 7px;font-weight:600;color:var(--ink)}
+.tag.must{background:var(--red);color:#fff}
+.tag.gem{background:var(--gold);color:#fff}
+.dist{font-weight:700;color:var(--red)}
+.note{margin:0;font-size:15px;line-height:1.55;padding-left:12px;border-left:3px solid var(--line);max-width:65ch}
+.route-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--c);background:none;border:0;padding:0;cursor:pointer;text-align:left}
+.actions{display:flex;gap:8px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:12px;padding:10px 12px;font-weight:700;font-size:14px;text-decoration:none;border:0;cursor:pointer}
+.btn.maps{flex:1;background:var(--ink);color:var(--bg)}
+.btn.tog{background:var(--chip);min-width:46px}
+.btn.tog[aria-pressed="true"].want{background:var(--gold);color:#fff}
+.btn.tog[aria-pressed="true"].done{background:var(--tokyo);color:#fff}
+.card.isdone{opacity:.62}
+.empty{color:var(--muted);text-align:center;padding:40px 10px}
+
+/* trasy */
+.routes{display:flex;flex-direction:column;gap:14px;margin-top:8px}
+.route{background:var(--surface);border-radius:18px;box-shadow:var(--shadow);padding:16px;display:flex;flex-direction:column;gap:12px}
+.route header{display:flex;flex-direction:column;gap:4px}
+.route .rt{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.route .rt .line{font-family:var(--display);font-size:12px;color:#fff;background:var(--c);border-radius:999px;padding:2px 9px}
+.route h3{margin:0;font-size:19px;font-weight:800;text-wrap:balance}
+.route .why{margin:0;color:var(--muted);font-size:14px}
+.stops{list-style:none;margin:0;padding:0;position:relative}
+.stops li{position:relative;padding:0 0 14px 30px;min-height:28px}
+.stops li::before{content:"";position:absolute;left:9px;top:12px;bottom:-4px;width:4px;background:var(--c)}
+.stops li:last-child::before{display:none}
+.stops li .bub{position:absolute;left:0;top:2px;width:22px;height:22px;border-radius:50%;background:var(--surface);border:4px solid var(--c)}
+.stops button{background:none;border:0;padding:0;text-align:left;cursor:pointer;font-weight:700;font-size:15px}
+.stops .sub{display:block;font-size:12.5px;color:var(--muted);font-weight:500}
+.leg{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+
+/* mapa */
+.mapbox{background:var(--surface);border-radius:18px;box-shadow:var(--shadow);overflow:hidden;position:relative;touch-action:none;margin-top:6px}
+.mapbox svg{display:block;width:100%;height:min(68vh,560px);cursor:grab}
+.maphint{font-size:12.5px;color:var(--muted);margin:8px 2px}
+.zoom{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:6px}
+.zoom button{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-size:20px;font-weight:700;cursor:pointer}
+.sheet{margin-top:10px}
+
+/* info */
+.info{display:flex;flex-direction:column;gap:14px;margin-top:8px}
+.box{background:var(--surface);border-radius:18px;box-shadow:var(--shadow);padding:16px}
+.box h2{margin:0 0 10px;font-size:18px;font-weight:800}
+.box ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:12px}
+.box li{display:flex;gap:10px}
+.box li .i{flex:0 0 26px;font-size:18px;line-height:1.3}
+.box li p{margin:0}
+.box .by{font-size:12px;color:var(--muted)}
+.install{background:var(--red);color:#fff}
+.install h2{color:#fff}
+.install ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+.install li{display:list-item}
+.install .btn{background:#fff;color:var(--red);margin-top:12px;width:100%}
+
+/* spodna navigacia */
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:40;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+.tabs nav{max-width:720px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+.tab{border:0;background:none;padding:9px 4px 10px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11.5px;font-weight:700;color:var(--muted);cursor:pointer}
+.tab .ic{font-size:20px;line-height:1.1;filter:grayscale(1);opacity:.75}
+.tab[aria-selected="true"]{color:var(--ink)}
+.tab[aria-selected="true"] .ic{filter:none;opacity:1}
+
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 14px;border-radius:12px;font-size:14px;font-weight:600;z-index:50;max-width:calc(100% - 32px)}
+:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body><div class="wrap">
+  <header class="hero">
+    <span class="kanji">日本 · TOKYO · KYOTO · OSAKA</span>
+    <h1>Japonsko guide</h1>
+    <div class="stats" id="stats"></div>
+  </header>
+
+  <div class="cities" id="cities" role="group" aria-label="Mesto"></div>
+
+  <main id="view"></main>
+</div>
+
+<div class="tabs"><nav role="tablist" aria-label="Sekcie">
+  <button class="tab" role="tab" data-tab="tipy" id="t-tipy"><span class="ic">📍</span>Tipy</button>
+  <button class="tab" role="tab" data-tab="trasy" id="t-trasy"><span class="ic">🚃</span>Trasy</button>
+  <button class="tab" role="tab" data-tab="mapa" id="t-mapa"><span class="ic">🗺️</span>Mapa</button>
+  <button class="tab" role="tab" data-tab="info" id="t-info"><span class="ic">💡</span>Info</button>
+</nav></div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+const DATA = {"intro": "Tu su moje tipy z Japonska, kam ist, co jest a co sa oplati spojit dokopy. Ku kazdemu miestu mate moj komentar a link rovno do Google Maps.", "cities": [{"id": "tokyo", "name": "Tokio", "kanji": "東京"}, {"id": "kyoto", "name": "Kjóto", "kanji": "京都"}, {"id": "osaka", "name": "Osaka", "kanji": "大阪"}, {"id": "nara", "name": "Nara", "kanji": "奈良"}, {"id": "kamakura", "name": "Kamakura", "kanji": "鎌倉"}], "areas": {"SH": {"name": "Shibuya", "note": "Okej, v Shibuyi som poslal strasne vela veci."}, "HJ": {"name": "Harajuku & Aoyama", "note": ""}, "SJ": {"name": "Shinjuku", "note": "Toto su uplne ze povinnosti a priority, co treba v Shinjuku vidiet."}, "RP": {"name": "Roppongi & Akasaka", "note": ""}, "AS": {"name": "Asakusa, Ueno & Akihabara", "note": ""}, "TX": {"name": "Mimo centra", "note": ""}, "KH": {"name": "Higashiyama", "note": ""}, "KC": {"name": "Centrum Kjóta", "note": ""}, "KF": {"name": "Ďalej od centra", "note": ""}, "OC": {"name": "Hrad & okolie", "note": "Co sa tyka Osaky… to je take mesto hlavne na jedlo a len taky vibe… tam toho kvazi neni az tak vela vidiet zo starych veci."}, "ON": {"name": "Namba & Dotonbori", "note": ""}, "OU": {"name": "Umeda", "note": ""}, "OS": {"name": "Shinsekai & Abeno", "note": ""}, "NR": {"name": "Nara", "note": "Nara je uplna klasika, tam idete iba na pol dna so srnkami."}, "KM": {"name": "Kamakura & Enoshima", "note": "Toto je ako bonus, 1 day trip z Tokya."}}, "places": [{"id": "shibuyasky", "name": "Shibuya Sky", "city": "tokyo", "area": "SH", "cat": "view", "tags": ["rezervovat"], "note": "Je to take tourist klise, ale stoji za to. Ak bude pekny den, tak sa oplati ist, len vacsinou to je vypredane uz na dlho dopredu.", "url": "https://www.google.com/maps/place/Shibuya+Sky/@35.6579461,139.703523,738m/data=!3m2!1e3!5s0x60188b7b9c819b61:0x92144cdf397130f5!4m6!3m5!1s0x60188b6825f61ae1:0x6ff47ee61e522473!8m2!3d35.6586719!4d139.7019848!16s%2Fg%2F11hdvt_gp9", "lat": 35.6586719, "lng": 139.7019848, "code": "SH-01", "short": "Je to take tourist klise, ale stoji za to.", "offmap": false}, {"id": "magspark", "name": "Mag's Park Rooftop", "city": "tokyo", "area": "SH", "cat": "view", "tags": ["hidden gem"], "note": "Toto je taky hidden gem, dobry rooftop a jediny poriadny, kde sa da dobre vidiet na tu krizovatku… Musite ist cez ten obchodny dom na horne poschodie a ku vstupu este aj davaju drink.", "url": "https://www.google.com/maps/place/Mag's+Park+Rooftop+Shibuya+Crossing/@35.6595765,139.7007586,90m/data=!3m2!1e3!5s0x60188ca8027011b9:0xaf0e3821734cad50!4m6!3m5!1s0x60188b93f6e18575:0x3fd1a72e904eb5fd!8m2!3d35.6596547!4d139.7008219!16s%2Fg%2F11g0hxxl1v", "lat": 35.6596547, "lng": 139.7008219, "code": "SH-02", "short": "Toto je taky hidden gem, dobry rooftop a jediny poriadny, kde sa da dobre vidiet na tu kri…", "offmap": false}, {"id": "celavi", "name": "CÉ LA VI Tokyo", "city": "tokyo", "area": "SH", "cat": "bar", "tags": [], "note": "Ce La Vi je taka rooftop restika/bar/klub, kde je na terase velmi pekne a je tam dobry chill aj celkom dobre vyhlady. Urcite sa tam oplati ist aspon na drink.", "url": "https://www.google.com/maps/place/C%C3%89+LA+VI+TOKYO/@35.6577,139.7002696,89m/data=!3m2!1e3!5s0x60188b57985e3c21:0x2b2d03442af51584!4m6!3m5!1s0x60188b502d673a83:0xb5db861a876a9348!8m2!3d35.657427!4d139.7001263!16s%2Fg%2F11j3ll_w82", "lat": 35.657427, "lng": 139.7001263, "code": "SH-03", "short": "Ce La Vi je taka rooftop restika/bar/klub, kde je na terase velmi pekne a je tam dobry chi…", "offmap": false}, {"id": "barpiano", "name": "Bar Piano", "city": "tokyo", "area": "SH", "cat": "bar", "tags": ["vecer"], "note": "Tento bar je v takej ulicke, kde su dalsie bary, v Japonsku to nazyvaju yokocho a tieto yokocho maju vzdy super dobry vibe. Kedze to je hned na Shibuyi, tak sa oplati minimalne nakuknut, ak je cas, je to na skok.", "url": "https://www.google.com/maps/place/BAR+PIANO/@35.6587083,139.6998833,413m/data=!3m2!1e3!5s0x60188b5800f48ee3:0x68b58c0268d76363!4m6!3m5!1s0x60188b58007e8009:0x3bdd3aed74a62477!8m2!3d35.6600497!4d139.7014981!16s%2Fg%2F11bw2g3tmb", "lat": 35.6600497, "lng": 139.7014981, "code": "SH-04", "short": "Tento bar je v takej ulicke, kde su dalsie bary, v Japonsku to nazyvaju yokocho a tieto yo…", "offmap": false}, {"id": "gyukatsu", "name": "Gyukatsu Kyoto Katsugyu", "city": "tokyo", "area": "SH", "cat": "food", "tags": ["must"], "note": "Tato restika asi bude full, ale ked budete vidiet gyukatsu, urcite na to chodte. To je steak, casto aj wagyu, vyprazany v tempure. Je to super dobre, to je fakt must.", "url": "https://www.google.com/maps/place/GYUKATSU+Kyoto+Katsugyu+Shibuya+Dogenzaka/@35.656472,139.6960664,345m/data=!3m1!1e3!4m6!3m5!1s0x60188b5609c33713:0x9ec2bfd2013c81a7!8m2!3d35.6572791!4d139.6961933!16s%2Fg%2F11b_3ghj4j", "lat": 35.6572791, "lng": 139.6961933, "code": "SH-05", "short": "Tato restika asi bude full, ale ked budete vidiet gyukatsu, urcite na to chodte.", "offmap": false}, {"id": "gZvjNHXei8Qx1zpR8", "name": "Starbucks Reserve Roastery Tokyo", "city": "tokyo", "area": "SH", "cat": "cafe", "tags": ["1–2 hod"], "note": "Starbucks Reserve Roastery je taka haluz. Ak ste to nikdy nevideli, tak to urcite chodte pozriet, ak vyjde cas, ale treba na to aj 1–2 hodiny. Tychto roastery je na svete asi 6 alebo 7 a je to fakt unikatne, mega zaujimave a aj dobre veci tam maju.", "url": "https://maps.app.goo.gl/gZvjNHXei8Qx1zpR8", "lat": 35.6492642, "lng": 139.6925907, "code": "SH-06", "short": "Starbucks Reserve Roastery je taka haluz.", "offmap": false}, {"id": "Ebxz7kHA2TdB6n6p8", "name": "The Matcha Tokyo Miyashita Park", "city": "tokyo", "area": "SH", "cat": "cafe", "tags": [], "note": "Tu maju dobru matchu a veci z matche, ale dolezite, preco to posielam, je, ze rovno nad tym je tento rooftop park.", "url": "https://maps.app.goo.gl/Ebxz7kHA2TdB6n6p8", "lat": 35.6608703, "lng": 139.7017163, "code": "SH-07", "short": "Tu maju dobru matchu a veci z matche, ale dolezite, preco to posielam, je, ze rovno nad ty…", "offmap": false}, {"id": "465vxNWfFSXRF75z9", "name": "Miyashita Park", "city": "tokyo", "area": "SH", "cat": "park", "tags": ["den aj noc"], "note": "Vsade su skateri a mladi Japonci a je tam cool vibe cez den aj v noci.", "url": "https://maps.app.goo.gl/465vxNWfFSXRF75z9", "lat": 35.6617182, "lng": 139.7016472, "code": "SH-08", "short": "Vsade su skateri a mladi Japonci a je tam cool vibe cez den aj v noci.", "offmap": false}, {"id": "8YBkfNDKfuKoGVz47", "name": "Shibuya Parco", "city": "tokyo", "area": "SH", "cat": "shop", "tags": [], "note": "V tejto budove v Shibuyi (vsetko je nablizku toho, co posielam) je obrovske Pokemon Center aj Nintendo a je to jednoducho nieco, co sa hodi pozriet, ked uz ste v tom Japonsku. Celkovo si na nakupy treba idealne usetrit cas.", "url": "https://maps.app.goo.gl/8YBkfNDKfuKoGVz47", "lat": 35.6620484, "lng": 139.6987767, "code": "SH-09", "short": "V tejto budove v Shibuyi (vsetko je nablizku toho, co posielam) je obrovske Pokemon Center…", "offmap": false}, {"id": "Bn1Qz1gurXfQjKoB9", "name": "MEGA Don Quijote Shibuya", "city": "tokyo", "area": "SH", "cat": "shop", "tags": ["must", "24/7"], "note": "Kamo, sem musite ist, to je kde ides pesi od Shibuya Crossing. To je uplny bizar. Vola sa to Don Quijote alebo Donki a je to asi 8-poschodovy 24/7 obchod s doslovne vsetkym, co na svete existuje. Fakt haluz na stratenie, je to mrte slavne a toto je vazne ze povinnost. Mozno to vyznie divne, ze odporucam obycajny obchod, ale to pochopis, ked tam budes… Plus sa tam daju picovinky kupit hah. Som tam nechal asi 80 eur na sladkosti na Slovensko 😀", "url": "https://maps.app.goo.gl/Bn1Qz1gurXfQjKoB9", "lat": 35.6603873, "lng": 139.6978172, "code": "SH-10", "short": "Kamo, sem musite ist, to je kde ides pesi od Shibuya Crossing.", "offmap": false}, {"id": "GcAHeCSpyN9y7UHC9", "name": "Ikina Sushi Dokoro Abe Aoyama", "city": "tokyo", "area": "HJ", "cat": "sushi", "tags": ["premium"], "note": "Toto je uz taka sushi restika, co je viac premium.", "url": "https://maps.app.goo.gl/GcAHeCSpyN9y7UHC9", "lat": 35.6639296, "lng": 139.7089465, "code": "HJ-01", "short": "Toto je uz taka sushi restika, co je viac premium.", "offmap": false}, {"id": "VYxffERT2bAWgzLd8", "name": "Uobei Shibuya Dogenzaka", "city": "tokyo", "area": "SH", "cat": "sushi", "tags": ["belt"], "note": "Toto je dalsia sushi belt v Shibuyi. To minimalne raz treba absolvovat.", "url": "https://maps.app.goo.gl/VYxffERT2bAWgzLd8", "lat": 35.6594349, "lng": 139.6979207, "code": "SH-11", "short": "Toto je dalsia sushi belt v Shibuyi.", "offmap": false}, {"id": "nvFBvgqnr2ASRXwMA", "name": "Tsukiji Sushisei Shibuya", "city": "tokyo", "area": "SH", "cat": "sushi", "tags": [], "note": "Dalsie sushi, co som tusim bol, uz ani nepamatam 😀", "url": "https://maps.app.goo.gl/nvFBvgqnr2ASRXwMA", "lat": 35.6590658, "lng": 139.6989153, "code": "SH-12", "short": "Dalsie sushi, co som tusim bol, uz ani nepamatam 😀", "offmap": false}, {"id": "VjvDwwUyR3KHhmDW8", "name": "Sushizanmai Shibuya", "city": "tokyo", "area": "SH", "cat": "sushi", "tags": ["dobra cena"], "note": "Toto Sushizanmai je realne siet s viac prevadzkami, ale na toto som zobral aj chalanov, ked dosli pozriet… Fakt dobre sushi, fakt, a za prijatelnu cenu.", "url": "https://maps.app.goo.gl/VjvDwwUyR3KHhmDW8", "lat": 35.6592549, "lng": 139.6979579, "code": "SH-13", "short": "Toto Sushizanmai je realne siet s viac prevadzkami, ale na toto som zobral aj chalanov, ke…", "offmap": false}, {"id": "QrEeYTXkvuaAovpm7", "name": "Rokuetei Hitsumabushi", "city": "tokyo", "area": "SH", "cat": "food", "tags": [], "note": "Toto v Shibuyi… tie japonske steaky na ryzi su neuveritelne.", "url": "https://maps.app.goo.gl/QrEeYTXkvuaAovpm7", "lat": 35.658168, "lng": 139.6986262, "code": "SH-14", "short": "Toto v Shibuyi…", "offmap": false}, {"id": "6y5hYLhqwnJG6sXC8", "name": "Shabu-shabu On-yasai Shibuya", "city": "tokyo", "area": "SH", "cat": "food", "tags": ["all you can eat"], "note": "Toto je v Shibuyi take jedlo, co sa vola shabu shabu… je to japonska verzia hotpotu z Ciny. Sem som zobral celu partiu… je to pecka. Stoji to nejak 4000–8000 jenov, cize lacne, a je to all you can eat na hodinu, s priplatkom aj wagyu all you can eat. Toto bolo mega dobre, to odporucam… ak nie tuto konkretnu restiku, tak skusit niekde shabu shabu.", "url": "https://maps.app.goo.gl/6y5hYLhqwnJG6sXC8", "lat": 35.6613536, "lng": 139.7010709, "code": "SH-15", "short": "Toto je v Shibuyi take jedlo, co sa vola shabu shabu…", "offmap": false}, {"id": "RwjHJx6KoTA7uzFV7", "name": "Harajuku", "city": "tokyo", "area": "HJ", "cat": "area", "tags": ["must", "pol dna+"], "note": "Zo Shibuye sa da prejst pesi az sem. Je to Harajuku a tu fakt odporucam dat si aspon minimalne pol dna na prechadzanie a cekovanie obchodov. Je tam milion super 2nd hand dealov a nalozene vintage obchody, fakt je to tam vsetko mega pekne. Za mna realne najlepsia cast Tokya. Ked tam bol Kanye, tak sem chodil, aj ho tam videli.", "url": "https://maps.app.goo.gl/RwjHJx6KoTA7uzFV7", "lat": 35.6699682, "lng": 139.709008, "code": "HJ-02", "short": "Zo Shibuye sa da prejst pesi az sem.", "offmap": false}, {"id": "SizrMVkYwKaH1h2e8", "name": "Harajuku Station", "city": "tokyo", "area": "HJ", "cat": "transit", "tags": [], "note": "Na Harajuku som vacsinou chodil pesi, ale da sa dojst aj tusim 2 zastavky na tuto stanicu.", "url": "https://maps.app.goo.gl/SizrMVkYwKaH1h2e8", "lat": 35.6700901, "lng": 139.7024662, "code": "HJ-03", "short": "Na Harajuku som vacsinou chodil pesi, ale da sa dojst aj tusim 2 zastavky na tuto stanicu.", "offmap": false}, {"id": "54CMtuSCbrA7nk9D6", "name": "Meiji Jingu", "city": "tokyo", "area": "HJ", "cat": "temple", "tags": ["must"], "note": "A hned za nou je park a Meiji Jingu shrine, kde by ste sa urcite mali ist pozriet. Je tam taky chram, pekne miesto na ceremonialy… niekedy aj svadba… Mega stary strom v chrame a tam sa robi taka vec, ze napises svoje priania na take drievko a zavesis to tam… je to taka cool cinnost.", "url": "https://maps.app.goo.gl/54CMtuSCbrA7nk9D6", "lat": 35.6763976, "lng": 139.6993259, "code": "HJ-04", "short": "A hned za nou je park a Meiji Jingu shrine, kde by ste sa urcite mali ist pozriet.", "offmap": false}, {"id": "w7VUu4ZUG62ssiVe8", "name": "Tokyu Plaza Harajuku „Harakado\"", "city": "tokyo", "area": "HJ", "cat": "landmark", "tags": [], "note": "Po ceste do Harajuku sa ide vacsinou okolo tejto budovy. To je iba tip ako pekna budova.", "url": "https://maps.app.goo.gl/w7VUu4ZUG62ssiVe8", "lat": 35.6684259, "lng": 139.7049858, "code": "HJ-05", "short": "Po ceste do Harajuku sa ide vacsinou okolo tejto budovy.", "offmap": false}, {"id": "CL2Euch5Nj496RyW9", "name": "Liberty Walk Tokyo", "city": "tokyo", "area": "HJ", "cat": "cars", "tags": ["merch"], "note": "V Harajuku je tento shop. Tu som si kupil tricko, mikinu a pod… Je to jedna, asi najznamejsia tokijska tunerska firma a maju taky merch shop a vyzera to super, vzdy tam vidis nejake nalozene auto a podobne. Je to cool vidiet subkultury v Tokyu a vsade poblizku su same nalozene obchody, fakt tak originalne veci a produkty a obchodiky, ze sa z toho clovek zblazni.", "url": "https://maps.app.goo.gl/CL2Euch5Nj496RyW9", "lat": 35.6694863, "lng": 139.7082341, "code": "HJ-06", "short": "V Harajuku je tento shop.", "offmap": false}, {"id": "rT2arH1WcXHxzgd8A", "name": "Rizlabo Kitchen", "city": "tokyo", "area": "HJ", "cat": "sweet", "tags": [], "note": "V Harajuku je aj tato restika na japonske palacinky. Tych je viac, takze treba sa aj pozerat, co je ponuka na ulici… V Japonsku sa naozaj bez obav da fungovat tak, ze clovek vidi plagat alebo obrazok a moze ist do tej restiky… neni sanca sa ojebat… Neni to ako u nas na Slovensku, kde bez kontroly Google Maps by som tam nevkrocil.", "url": "https://maps.app.goo.gl/rT2arH1WcXHxzgd8A", "lat": 35.6685791, "lng": 139.7108039, "code": "HJ-07", "short": "V Harajuku je aj tato restika na japonske palacinky.", "offmap": false}, {"id": "6RRpVyTx1H6cbzK5A", "name": "Omoide Yokocho", "city": "tokyo", "area": "SJ", "cat": "bar", "tags": ["must", "vecer"], "note": "Toto je asi najznamejsia ta ulicka yokocho… je to tam fakt pekne, fotogenicke, mozno drahe kvoli turistom, ale to je tiez uplna povinnost, je to jedna z najhlavnejsich veci, co vidiet.", "url": "https://maps.app.goo.gl/6RRpVyTx1H6cbzK5A", "lat": 35.6927037, "lng": 139.6995778, "code": "SJ-01", "short": "Toto je asi najznamejsia ta ulicka yokocho…", "offmap": false}, {"id": "PeX7GiENsAJ64Bru7", "name": "Tokyu Kabukicho Tower", "city": "tokyo", "area": "SJ", "cat": "fun", "tags": ["must", "vecer"], "note": "Toto je budova na Kabukicho namesti. Tu som travil kazdy den… byval som v Shinjuku. Toto namestie, hlavne tam musite ist vecer. Je to najvacsi bizar, aky sa da. Ti ludia, ti ozrani… ten chaos… vsetko uplna haluz. Vsade su herne a bowlingy a sipky nonstop a v tom Kabukicho Tower vnutri je to sialene osvetlene a milion mini barov a sem musite ist, vazne ze URCITE.", "url": "https://maps.app.goo.gl/PeX7GiENsAJ64Bru7", "lat": 35.6957513, "lng": 139.7005894, "code": "SJ-02", "short": "Toto je budova na Kabukicho namesti.", "offmap": false}, {"id": "Jh4JTpKiHhJfcVxq7", "name": "Kamukura Ramen Shinjuku", "city": "tokyo", "area": "SJ", "cat": "food", "tags": [], "note": "Toto je ramen, ktory som mal strasne rad a po posilke som vzdy isiel, ale popravde neviem, ci to kazdemu sadne rovnako.", "url": "https://maps.app.goo.gl/Jh4JTpKiHhJfcVxq7", "lat": 35.6943956, "lng": 139.70208, "code": "SJ-03", "short": "Toto je ramen, ktory som mal strasne rad a po posilke som vzdy isiel, ale popravde neviem,…", "offmap": false}, {"id": "VrUciSwQLFLWkQHw8", "name": "Shinjuku Golden Gai", "city": "tokyo", "area": "SJ", "cat": "bar", "tags": ["must", "vecer"], "note": "Golden Gai je taka asi 100+ rokov stara yokocho s barmi a vsetko je to take ruin vibe. Ale tam sa plati casto aj 1500 jenov za sedenie ako fee, lebo tam je tak malo miesta… Kazdopadne cool zazitok… jedna z hlavnych atrakcii.", "url": "https://maps.app.goo.gl/VrUciSwQLFLWkQHw8", "lat": 35.6941118, "lng": 139.7047611, "code": "SJ-04", "short": "Golden Gai je taka asi 100+ rokov stara yokocho s barmi a vsetko je to take ruin vibe.", "offmap": false}, {"id": "tQ8xrq8J6kQ6DVzB7", "name": "Tokyo Metropolitan Government Building", "city": "tokyo", "area": "SJ", "cat": "view", "tags": ["zadarmo"], "note": "Blizko Shinjuku je tato budova. Je to rooftop na asi, neviem, 50. poschodi, kde vidiet velmi pekne vyhlady. A to, co je na tom super, je, ze to je kompletne zadarmo… ziaden vstup ani nic. Je to vladna budova a toto je proste pre ludi zadarmo… takze vam odporucam tam ist… nebookuje sa nic.", "url": "https://maps.app.goo.gl/tQ8xrq8J6kQ6DVzB7", "lat": 35.689733, "lng": 139.6916563, "code": "SJ-05", "short": "Blizko Shinjuku je tato budova.", "offmap": false}, {"id": "7TktssjErUWCgfAw9", "name": "Darts Cafe DELTA Shinjuku", "city": "tokyo", "area": "SJ", "cat": "fun", "tags": ["vecer"], "note": "Sem sme v Shinjuku chodili hravat sipky… To by som odporucal, aby ste raz isli skusit… ide o ten vibe… Tam to ti ludia maju fakt ako hobby a hlavne tie masiny maju brutal animacie… ved to by ste uvideli.", "url": "https://maps.app.goo.gl/7TktssjErUWCgfAw9", "lat": 35.6940441, "lng": 139.7015024, "code": "SJ-06", "short": "Sem sme v Shinjuku chodili hravat sipky…", "offmap": false}, {"id": "CBNmswBBsTAKaprD6", "name": "EXBAR Tokyo plus", "city": "tokyo", "area": "SJ", "cat": "fun", "tags": ["vecer"], "note": "Sem sme tiez chodili hravat sipky a maju tam najlepsi pinball a beer pong… Ten beer pong musite skusit, oni maju stol za par litrov s full displejom a animaciami, fakt haluz.", "url": "https://maps.app.goo.gl/CBNmswBBsTAKaprD6", "lat": 35.6898815, "lng": 139.702266, "code": "SJ-07", "short": "Sem sme tiez chodili hravat sipky a maju tam najlepsi pinball a beer pong…", "offmap": false}, {"id": "d17PK7zy8BAMSnrAA", "name": "Shinjuku Gyoen", "city": "tokyo", "area": "SJ", "cat": "park", "tags": ["jesen"], "note": "Shinjuku Garden je najvacsi park v Tokyu… Maju tam aj sklenik… bonsaje… nadherny travnik… vyhlady… je to tam nadherne… Ked uz bude jesen, tak tam maju brutalne zlte ginkgo stromy.", "url": "https://maps.app.goo.gl/d17PK7zy8BAMSnrAA", "lat": 35.6867561, "lng": 139.7126225, "code": "SJ-08", "short": "Shinjuku Garden je najvacsi park v Tokyu…", "offmap": false}, {"id": "VxajfEKwLaWxQNkt9", "name": "Standing Sushi Misaki Shinjuku", "city": "tokyo", "area": "SJ", "cat": "sushi", "tags": ["lacne"], "note": "Toto je este Shinjuku, ale je to mega sushi a haluz je, ze tam clovek stoji a doslovne objednava po kuskoch a dostane to do 1 min do ruky. A samozrejme lacne.", "url": "https://maps.app.goo.gl/VxajfEKwLaWxQNkt9", "lat": 35.690371, "lng": 139.699383, "code": "SJ-09", "short": "Toto je este Shinjuku, ale je to mega sushi a haluz je, ze tam clovek stoji a doslovne obj…", "offmap": false}, {"id": "CNwRRrn7x6zDGuxr6", "name": "Shinjuku Station", "city": "tokyo", "area": "SJ", "cat": "transit", "tags": [], "note": "Shinjuku Station, kam asi dojdete metrom… je realne ze najvacsia stanica na svete. Denne tam prejde nejak 5 milionov ludi.", "url": "https://maps.app.goo.gl/CNwRRrn7x6zDGuxr6", "lat": 35.6896067, "lng": 139.7005713, "code": "SJ-10", "short": "Shinjuku Station, kam asi dojdete metrom…", "offmap": false}, {"id": "3WuAXTCb6vx9Pd9N6", "name": "Ryu no Miyako Inshokugai", "city": "tokyo", "area": "SJ", "cat": "food", "tags": ["vecer"], "note": "Dalsia crazy restika v Shinjuku, co takto vyzera… fakt blaznive svetla, uplna haluz.", "url": "https://maps.app.goo.gl/3WuAXTCb6vx9Pd9N6", "lat": 35.6906414, "lng": 139.7020365, "code": "SJ-11", "short": "Dalsia crazy restika v Shinjuku, co takto vyzera…", "offmap": false}, {"id": "wALi5cZDiZimxMek6", "name": "Pachinko Espace Nittaku Kabukicho", "city": "tokyo", "area": "SJ", "cat": "fun", "tags": ["bizar"], "note": "Toto je v Shinjuku, ale sem sa musite ist pozriet… je to taka japonska verzia kasina a je to najvacsi bizar, aky som kedy videl… vola sa to pachinko… je to vsade a je to super divne… neuveritelny hluk, blikanie a pod.", "url": "https://maps.app.goo.gl/wALi5cZDiZimxMek6", "lat": 35.6940714, "lng": 139.7007764, "code": "SJ-12", "short": "Toto je v Shinjuku, ale sem sa musite ist pozriet…", "offmap": false}, {"id": "TU8gx6LSZ86Ao5AJ7", "name": "Ginkgo aleja, Meiji Jingu Gaien", "city": "tokyo", "area": "HJ", "cat": "cars", "tags": ["jesen"], "note": "Tato ulica je na jesen cela zlta, lebo su tam tie ginkgo stromy, a tam uvidis nonstop aj drahe auta a tunerov a Tokyo Drift typkov a tak. To mi odporucil jeden Japonec, co ma potom zobral s nimi s autami.", "url": "https://maps.app.goo.gl/TU8gx6LSZ86Ao5AJ7", "lat": 35.6754399, "lng": 139.7182668, "code": "HJ-08", "short": "Tato ulica je na jesen cela zlta, lebo su tam tie ginkgo stromy, a tam uvidis nonstop aj d…", "offmap": false}, {"id": "VmyzaV6NkmcXBcEE6", "name": "Hie Shrine", "city": "tokyo", "area": "RP", "cat": "temple", "tags": ["hidden gem"], "note": "Toto uz je ina lokalita… ale tento tip je vyborny, pretoze tu mas taky maly chram, ku ktoremu sa ide cez take cervene stlpy… Kvoli nim chodia ludia do Kyota daleko na pol dna sa fotit, ale realne je to zabity cas a toto je rovno v Tokyu a efekt je identicky… clovek nevie ani, kde je, a fotky su super.", "url": "https://maps.app.goo.gl/VmyzaV6NkmcXBcEE6", "lat": 35.6747136, "lng": 139.7396621, "code": "RP-01", "short": "Toto uz je ina lokalita…", "offmap": false}, {"id": "1swn5WsSpBCoLbDT9", "name": "Bingo Sports", "city": "tokyo", "area": "RP", "cat": "cars", "tags": [], "note": "Hned vedla je showroom nejakeho miliardara, co tam ma vystavene auta, a mozes tam ist len tak sa pozriet.", "url": "https://maps.app.goo.gl/1swn5WsSpBCoLbDT9", "lat": 35.6736237, "lng": 139.7401048, "code": "RP-02", "short": "Hned vedla je showroom nejakeho miliardara, co tam ma vystavene auta, a mozes tam ist len …", "offmap": false}, {"id": "jZToMihq8iYik6fW7", "name": "Naruse Unagi Roppongi", "city": "tokyo", "area": "RP", "cat": "food", "tags": ["must"], "note": "Toto je za mna najlepsie jedlo zo seafoodu, ake existuje: grilovany uhor. Toto sa uz nachadza v Roppongi.", "url": "https://maps.app.goo.gl/jZToMihq8iYik6fW7", "lat": 35.6616997, "lng": 139.735385, "code": "RP-03", "short": "Toto je za mna najlepsie jedlo zo seafoodu, ake existuje: grilovany uhor.", "offmap": false}, {"id": "JfUfyZssmFJ49jL37", "name": "Roppongi Hills", "city": "tokyo", "area": "RP", "cat": "area", "tags": [], "note": "Roppongi je taka luxury cast… tam byvaju bohati Japonci… je to tam fancy, ale je to tam pekne a vsade je vsetko co pozerat… skvele bary a pod.", "url": "https://maps.app.goo.gl/JfUfyZssmFJ49jL37", "lat": 35.6607345, "lng": 139.7292066, "code": "RP-04", "short": "Roppongi je taka luxury cast…", "offmap": false}, {"id": "nnHeE8j7tVexdJzP9", "name": "Azabudai Hills", "city": "tokyo", "area": "RP", "cat": "view", "tags": ["zadarmo", "teamLab"], "note": "Toto je taky development, ktory stal niekolko miliard a stavali to realnych 20 rokov. Vola sa to Azabudai Hills a su tam galerie, obchody a podobne. Je tam aj teamLab Tokyo, co by ste mali urcite dat, je to take zname turisticke, taka interaktivna galeria. No a v tejto budove, ked idete na horne poschodie, je zadarmo tiez vyhliadka, odkial sa da velmi dobre vidiet ta eiffelovka. O nej som pocul, ze sa neoplati na nu ist… tak namiesto toho mam tento trik, ze ides zadarmo do tejto budovy oproti nej a mas na nu vyhlad, a spojis to s teamLabom.", "url": "https://maps.app.goo.gl/nnHeE8j7tVexdJzP9", "lat": 35.6615447, "lng": 139.7408302, "code": "RP-05", "short": "Toto je taky development, ktory stal niekolko miliard a stavali to realnych 20 rokov.", "offmap": false}, {"id": "fJvGw9zapa2oDLYq6", "name": "Senso-ji / Asakusa Shrine", "city": "tokyo", "area": "AS", "cat": "temple", "tags": ["must"], "note": "Je toho strasne vela, ale urcite sa neda zabudnut na Asakusa shrine. Je to jeden z top 3 chramov v Tokyu, takze to je fakt must see. Tam si potom mozete ceremonialne vyvestit z takych paliciek, ako to tam ludia robia, to urobte urcite :D", "url": "https://maps.app.goo.gl/fJvGw9zapa2oDLYq6", "lat": 35.7151665, "lng": 139.7974389, "code": "AS-01", "short": "Je toho strasne vela, ale urcite sa neda zabudnut na Asakusa shrine.", "offmap": false}, {"id": "ZXSD3GpHFKxqAmu27", "name": "Akihabara UDX", "city": "tokyo", "area": "AS", "cat": "cars", "tags": [], "note": "Akihabara je taka stvrt pre anime fans, ale bolo to zname hernami a tou znamou Sega budovou a je to take zaujimave urcite… Ak vyjde cas, tak to treba vidiet, aj kamosov som zobral. Tuto budovu, co som poslal, mi odporucil taky racer, ktory vravel, ze tam casto su meetupy alebo len tak rozne auta… Realne som tam isiel do garaze a vsade boli top tunerske auta.", "url": "https://maps.app.goo.gl/ZXSD3GpHFKxqAmu27", "lat": 35.7005495, "lng": 139.7726153, "code": "AS-02", "short": "Akihabara je taka stvrt pre anime fans, ale bolo to zname hernami a tou znamou Sega budovo…", "offmap": false}, {"id": "YNkcEE3iKT7maJR57", "name": "Shunkaen Bonsai Museum", "city": "tokyo", "area": "TX", "cat": "museum", "tags": ["daleko"], "note": "My sme boli aj v bonsai muzeu… je to brutal krasne, len to je celkom od veci, takze to moze zabrat moc vela casu, co nemusite mat… ale keby ano, tak odporucam, naozaj krasne.", "url": "https://maps.app.goo.gl/YNkcEE3iKT7maJR57", "lat": 35.7026201, "lng": 139.8881503, "code": "TX-01", "short": "My sme boli aj v bonsai muzeu…", "offmap": true}, {"id": "PPopTrZr35rrbZig9", "name": "Daikoku Parking Area", "city": "tokyo", "area": "TX", "cat": "cars", "tags": ["iba autom"], "note": "Ak by ste mali auto, tak mi dajte vediet. Toto je miesto, kde sa stretavaju vsetci raceri z celeho mesta, ale da sa tam ist iba, iba, iba autom.", "url": "https://maps.app.goo.gl/PPopTrZr35rrbZig9", "lat": 35.4619051, "lng": 139.6805121, "code": "TX-02", "short": "Ak by ste mali auto, tak mi dajte vediet.", "offmap": true}, {"id": "TbNLQrQiDEeb2var9", "name": "Yayoi Kusama Museum", "city": "tokyo", "area": "TX", "cat": "museum", "tags": [], "note": "Nalozene muzeum.", "url": "https://maps.app.goo.gl/TbNLQrQiDEeb2var9", "lat": 35.7031852, "lng": 139.7264985, "code": "TX-03", "short": "Nalozene muzeum.", "offmap": false}, {"id": "hgqchZ1QtwogeBLp6", "name": "Steak Shinoda", "city": "tokyo", "area": "AS", "cat": "food", "tags": [], "note": "Steak, stara restika.", "url": "https://maps.app.goo.gl/hgqchZ1QtwogeBLp6", "lat": 35.7075046, "lng": 139.7661564, "code": "AS-03", "short": "Steak, stara restika.", "offmap": false}, {"id": "QfJV8SKDu9MrjGAR6", "name": "Okonomiyaki Shiraiwa Asakusa", "city": "tokyo", "area": "AS", "cat": "food", "tags": ["zazitok"], "note": "Toto je jedlo, ktore by ste mali urcite skusit. Je to tradicne okonomiyaki a je to taka haluz, co si robite na grile, je to maso, kapusta, vajcia a pod… hlavne je to zazitok.", "url": "https://maps.app.goo.gl/QfJV8SKDu9MrjGAR6", "lat": 35.7120013, "lng": 139.795855, "code": "AS-04", "short": "Toto je jedlo, ktore by ste mali urcite skusit.", "offmap": false}, {"id": "M5Zw7bHnpuH4YdYy6", "name": "Kamakura – Hase-dera", "city": "kamakura", "area": "KM", "cat": "trip", "tags": ["1-day trip"], "note": "Toto je ako bonus… ale ak sa vam da, urcite si dajte 1 day trip do Kamakury… je to asi 1:30 hod z Tokya za par korun. Je to tam nadherne, kludne… pekne chramy… velka socha Budhu… nalozene obchodiky… fakt pekne.", "url": "https://maps.app.goo.gl/M5Zw7bHnpuH4YdYy6", "lat": 35.3124772, "lng": 139.5330975, "code": "KM-01", "short": "Toto je ako bonus…", "offmap": false}, {"id": "SzzVCziW3mYX9A4f9", "name": "Cajovna v bambusovom lese", "city": "kamakura", "area": "KM", "cat": "cafe", "tags": ["do 17:00"], "note": "Je tam aj tato cajovna, ktora je uplne neskutocna… pozerate na bambusovy les. Ale dolezite je to pozriet do 17, lebo vtedy tusim zatvarali. Fakt krasa.", "url": "https://maps.app.goo.gl/SzzVCziW3mYX9A4f9", "lat": 35.3195822, "lng": 139.5685885, "code": "KM-02", "short": "Je tam aj tato cajovna, ktora je uplne neskutocna…", "offmap": false}, {"id": "aE5m4ebVuk9LPtpg8", "name": "Enoshima Uomi-tei", "city": "kamakura", "area": "KM", "cat": "food", "tags": ["vyhlad na Fuji"], "note": "V Kamakure je aj tato restika, z ktorej, ked je pekny den, je vidiet aj Mt. Fuji.", "url": "https://maps.app.goo.gl/aE5m4ebVuk9LPtpg8", "lat": 35.2990494, "lng": 139.4752808, "code": "KM-03", "short": "V Kamakure je aj tato restika, z ktorej, ked je pekny den, je vidiet aj Mt.", "offmap": false}, {"id": "bvbmDj4FCQf8byV38", "name": "Kinkaku-ji", "city": "kyoto", "area": "KF", "cat": "temple", "tags": ["must", "priorita c. 1"], "note": "V Kyote je urcite povinnost ist na tento zlaty cajovy dom… je to neuveritelne… ta preprava a vsetko realne zoberie aj pol dna cca… ale je to vazne ze priorita c. 1.", "url": "https://maps.app.goo.gl/bvbmDj4FCQf8byV38", "lat": 35.03937, "lng": 135.7292431, "code": "KF-01", "short": "V Kyote je urcite povinnost ist na tento zlaty cajovy dom…", "offmap": false}, {"id": "3xAceVCZPnHttHnJ7", "name": "Rurikoin", "city": "kyoto", "area": "KF", "cat": "temple", "tags": [], "note": "Tento chram je zas v inej casti, ale je to fakt krasne a ak sa podari to niekam strcit, stoji to za to… mate tam takyto vyhlad do zahrady… uplny ryokan vibe.", "url": "https://maps.app.goo.gl/3xAceVCZPnHttHnJ7", "lat": 35.0635789, "lng": 135.8085416, "code": "KF-02", "short": "Tento chram je zas v inej casti, ale je to fakt krasne a ak sa podari to niekam strcit, st…", "offmap": false}, {"id": "ZQ7hUvpJShPyfALe7", "name": "Kiyomizu-dera", "city": "kyoto", "area": "KH", "cat": "temple", "tags": ["klasika"], "note": "Toto su take klasiky, chramy v Kyote, co su zname, ale posielam to, lebo ved treba vidiet.", "url": "https://maps.app.goo.gl/ZQ7hUvpJShPyfALe7", "lat": 34.9946662, "lng": 135.784661, "code": "KH-01", "short": "Toto su take klasiky, chramy v Kyote, co su zname, ale posielam to, lebo ved treba vidiet.", "offmap": false}, {"id": "6txUVjQf7m4wVDvV6", "name": "CICON Rooftop Bar", "city": "kyoto", "area": "KH", "cat": "bar", "tags": ["hidden gem"], "note": "Toto uz je konecne navrat k hidden gem tipom… neni to vlastne hidden, ale je to nalozeny rooftop bar, super vibe a vazne v Kyote to je iny pocit.", "url": "https://maps.app.goo.gl/6txUVjQf7m4wVDvV6", "lat": 34.995199, "lng": 135.7740835, "code": "KH-02", "short": "Toto uz je konecne navrat k hidden gem tipom…", "offmap": false}, {"id": "9zTfT4Dqqyt7YqsZ8", "name": "Tempura Tententen", "city": "kyoto", "area": "KC", "cat": "food", "tags": [], "note": "Klasicka tempura restika… zda sa to o nicom, ale je to mega, fakt.", "url": "https://maps.app.goo.gl/9zTfT4Dqqyt7YqsZ8", "lat": 34.9891653, "lng": 135.7606705, "code": "KC-01", "short": "Klasicka tempura restika…", "offmap": false}, {"id": "yGA5UeSNw36M2eJn9", "name": "Ninuki egg sandwich", "city": "kyoto", "area": "KC", "cat": "sweet", "tags": [], "note": "Toto som videl na IG, ze to ma byt mega egg sandwich, co oni robia neskutocny.", "url": "https://maps.app.goo.gl/yGA5UeSNw36M2eJn9", "lat": 34.9985851, "lng": 135.7552793, "code": "KC-02", "short": "Toto som videl na IG, ze to ma byt mega egg sandwich, co oni robia neskutocny.", "offmap": false}, {"id": "5aKrtojmZi4kAeUk8", "name": "RAU Patisserie & Chocolate", "city": "kyoto", "area": "KC", "cat": "sweet", "tags": [], "note": "Taketo cukrarne su vsade v Kyote a su neskutocne.", "url": "https://maps.app.goo.gl/5aKrtojmZi4kAeUk8", "lat": 35.0025128, "lng": 135.768908, "code": "KC-03", "short": "Taketo cukrarne su vsade v Kyote a su neskutocne.", "offmap": false}, {"id": "Bnyo8Rpg8oYzUFLq5", "name": "Yasaka Pagoda (Hokan-ji)", "city": "kyoto", "area": "KH", "cat": "temple", "tags": ["klasika"], "note": "Samozrejme klasika, chram nalozeny.", "url": "https://maps.app.goo.gl/Bnyo8Rpg8oYzUFLq5", "lat": 34.9985591, "lng": 135.7791783, "code": "KH-03", "short": "Samozrejme klasika, chram nalozeny.", "offmap": false}, {"id": "hxyhKk7v6W52XRhEA", "name": "Cafe Kawataro", "city": "kyoto", "area": "KH", "cat": "cafe", "tags": [], "note": "Tato kaviaren ma super zahradku a vazne tam je proste kazda kava zazitok… vyzera to krasne.", "url": "https://maps.app.goo.gl/hxyhKk7v6W52XRhEA", "lat": 35.0015528, "lng": 135.7793956, "code": "KH-04", "short": "Tato kaviaren ma super zahradku a vazne tam je proste kazda kava zazitok…", "offmap": false}, {"id": "zzsmTCnw2UHD2PtX9", "name": "Panel Cafe Kyoto", "city": "kyoto", "area": "KC", "cat": "sweet", "tags": [], "note": "Tu maju tiez japonske palacinky… ale btw asi budu vsade, rady, to si treba zvyknut.", "url": "https://maps.app.goo.gl/zzsmTCnw2UHD2PtX9", "lat": 35.0051395, "lng": 135.772634, "code": "KC-04", "short": "Tu maju tiez japonske palacinky…", "offmap": false}, {"id": "mBjkXucA9svpnrmeA", "name": "Kichi Kichi Omurice", "city": "kyoto", "area": "KC", "cat": "food", "tags": ["tazko sa dostat"], "note": "Toto je najznamejsie omurice v Japonsku. Asi sa vam tam nepodari dostat, ale skuste… a ak nie tam, tak to uvidite inde, to musite dat. To je zaklad japonskej food culture.", "url": "https://maps.app.goo.gl/mBjkXucA9svpnrmeA", "lat": 35.0072788, "lng": 135.7708108, "code": "KC-05", "short": "Toto je najznamejsie omurice v Japonsku.", "offmap": false}, {"id": "KG1trKW39sCj6N659", "name": "Wagyu Yakiniku Toku", "city": "kyoto", "area": "KC", "cat": "food", "tags": ["luxury"], "note": "Japonske BBQ, take luxury, ale vyzera super.", "url": "https://maps.app.goo.gl/KG1trKW39sCj6N659", "lat": 35.0063764, "lng": 135.7727208, "code": "KC-06", "short": "Japonske BBQ, take luxury, ale vyzera super.", "offmap": false}, {"id": "DQ5hv4g54jjbEmq4A", "name": "Shabu-shabu On-yasai Sanjo", "city": "kyoto", "area": "KC", "cat": "food", "tags": [], "note": "Tu je shabu shabu v Kyote. Raz to urcite musite skusit.", "url": "https://maps.app.goo.gl/DQ5hv4g54jjbEmq4A", "lat": 35.0093852, "lng": 135.7728594, "code": "KC-07", "short": "Tu je shabu shabu v Kyote.", "offmap": false}, {"id": "6TJpQjujjdjtxdKj9", "name": "Kyo Karucha Cafe", "city": "kyoto", "area": "KC", "cat": "sweet", "tags": [], "note": "Toto je tiez cool cukraren.", "url": "https://maps.app.goo.gl/6TJpQjujjdjtxdKj9", "lat": 35.0137122, "lng": 135.7617964, "code": "KC-08", "short": "Toto je tiez cool cukraren.", "offmap": false}, {"id": "X1FDDZvm3tcWEUnP6", "name": "K36 The Bar & Rooftop", "city": "kyoto", "area": "KH", "cat": "bar", "tags": ["rezervovat"], "note": "Tento roofbar je neskutocny, ale odporucam napisat a rezervovat miesto… prvy krat sme sa tam nevedeli dostat.", "url": "https://maps.app.goo.gl/X1FDDZvm3tcWEUnP6", "lat": 34.9976399, "lng": 135.7797054, "code": "KH-05", "short": "Tento roofbar je neskutocny, ale odporucam napisat a rezervovat miesto…", "offmap": false}, {"id": "ttyzkoAxBsLrDKvVA", "name": "Kyoto Imperial Palace (záhrady)", "city": "kyoto", "area": "KC", "cat": "temple", "tags": [], "note": "Samozrejme palac v Kyote je treba vidiet… tam su vnutri aj taketo zahrady krasne.", "url": "https://maps.app.goo.gl/ttyzkoAxBsLrDKvVA", "lat": 35.0213294, "lng": 135.7663396, "code": "KC-09", "short": "Samozrejme palac v Kyote je treba vidiet…", "offmap": false}, {"id": "tSCUHaKQUw1ttTyr6", "name": "Manyo Botanical Garden", "city": "nara", "area": "NR", "cat": "park", "tags": ["pol dna"], "note": "Nara je uplna klasika, tam idete iba na pol dna so srnkami… ale toto je botanicka tam a je to fakt pekne.", "url": "https://maps.app.goo.gl/tSCUHaKQUw1ttTyr6", "lat": 34.6824519, "lng": 135.8442139, "code": "NR-01", "short": "Nara je uplna klasika, tam idete iba na pol dna so srnkami…", "offmap": false}, {"id": "FFovNjT19KKnG7ze6", "name": "Isuien Garden", "city": "nara", "area": "NR", "cat": "park", "tags": ["lacny vstup"], "note": "Toto je zahrada v Nare. Ked sme tam boli, tak prsalo a aj tak to bolo krasne. Vstup je par centov… toto sa oplati pozriet, je to hned vedla srniek.", "url": "https://maps.app.goo.gl/FFovNjT19KKnG7ze6", "lat": 34.6855867, "lng": 135.8381144, "code": "NR-02", "short": "Toto je zahrada v Nare.", "offmap": false}, {"id": "JndW1TQfY9XtoP1t6", "name": "Blue Birds Rooftop Terrace", "city": "osaka", "area": "OC", "cat": "bar", "tags": ["hidden gem"], "note": "Treba vidiet ten hrad Osaky, ale co je moj nalozeny tip k tomu, je, ze hned vedla je super nenapadny rooftop bar, kde sa da dat drink s vyhladom rovno na ten hrad… vacsina ludi to obide… To je fakt pecka, treba pozriet, som tam bol neraz.", "url": "https://maps.app.goo.gl/JndW1TQfY9XtoP1t6", "lat": 34.6858372, "lng": 135.5265252, "code": "OC-01", "short": "Treba vidiet ten hrad Osaky, ale co je moj nalozeny tip k tomu, je, ze hned vedla je super…", "offmap": false}, {"id": "H4Aun9VTAuXwB52J7", "name": "Dotonbori", "city": "osaka", "area": "ON", "cat": "area", "tags": ["must"], "note": "V Osake treba ist ceknut cele Dotonbori a iba sa tam tulat… vsade maju steaky a wagyu a pod.", "url": "https://maps.app.goo.gl/H4Aun9VTAuXwB52J7", "lat": 34.6687234, "lng": 135.5012971, "code": "ON-01", "short": "V Osake treba ist ceknut cele Dotonbori a iba sa tam tulat…", "offmap": false}, {"id": "fQdGnSyk2YUFdFgz5", "name": "Okonomiyaki Bonkuraya Dotonbori", "city": "osaka", "area": "ON", "cat": "food", "tags": ["must"], "note": "Tu je okonomiyaki restika v Osake… tam to tusim aj vzniklo. Ako som uz pisal, tam to treba urcite vyskusat.", "url": "https://maps.app.goo.gl/fQdGnSyk2YUFdFgz5", "lat": 34.6688505, "lng": 135.5033756, "code": "ON-02", "short": "Tu je okonomiyaki restika v Osake…", "offmap": false}, {"id": "pGm4VZJkLFxXwxqh6", "name": "Achichi Honpo Takoyaki", "city": "osaka", "area": "ON", "cat": "food", "tags": ["streetfood"], "note": "Takoyaki je tiez jedlo, ktore je z Osaky, ak sa nemylim, a to je taky streetfood, tak ked to uvidite… take gulicky, co otacaju, tak to musite vyskusat. Ja som jedol tu napr.", "url": "https://maps.app.goo.gl/pGm4VZJkLFxXwxqh6", "lat": 34.6692402, "lng": 135.5031992, "code": "ON-03", "short": "Takoyaki je tiez jedlo, ktore je z Osaky, ak sa nemylim, a to je taky streetfood, tak ked …", "offmap": false}, {"id": "Ro3jc1MYgnhu284dA", "name": "Yakiniku Kitan Hozenji", "city": "osaka", "area": "ON", "cat": "food", "tags": [], "note": "Dalsie nalozene yakiniku, steaky na ryzi.", "url": "https://maps.app.goo.gl/Ro3jc1MYgnhu284dA", "lat": 34.6682611, "lng": 135.5024138, "code": "ON-04", "short": "Dalsie nalozene yakiniku, steaky na ryzi.", "offmap": false}, {"id": "2XB9ELjYEj36V2dj9", "name": "Rikuro's Cheesecake Namba", "city": "osaka", "area": "ON", "cat": "sweet", "tags": ["lacne"], "note": "Toto je ten slavny japonsky cheesecake, co mal asi 30 mil. videni… tak to bolo naozaj tu… je taky jemny, zaujimavy a super lacny, takze odporucam… ta rada sa hybe rychlo.", "url": "https://maps.app.goo.gl/2XB9ELjYEj36V2dj9", "lat": 34.666127, "lng": 135.501566, "code": "ON-05", "short": "Toto je ten slavny japonsky cheesecake, co mal asi 30 mil.", "offmap": false}, {"id": "Hw75qas2eE2itY5E6", "name": "Daiki Suisan Kaitenzushi Dotonbori", "city": "osaka", "area": "ON", "cat": "sushi", "tags": ["belt"], "note": "Dalsie pohyblive sushi.", "url": "https://maps.app.goo.gl/Hw75qas2eE2itY5E6", "lat": 34.6685919, "lng": 135.5028927, "code": "ON-06", "short": "Dalsie pohyblive sushi.", "offmap": false}, {"id": "zonBa8AJXtdNzW6A7", "name": "Shinsekai", "city": "osaka", "area": "OS", "cat": "area", "tags": [], "note": "Toto je uz taka rustikalna cast, kde boli rozne herne a pod. a je to cele take farebne, tiez znamy spot, lokalny, ale treba ceknut.", "url": "https://maps.app.goo.gl/zonBa8AJXtdNzW6A7", "lat": 34.6536555, "lng": 135.5056051, "code": "OS-01", "short": "Toto je uz taka rustikalna cast, kde boli rozne herne a pod.", "offmap": false}, {"id": "L4p3u2pukaGKMP2r5", "name": "Peacock Alley", "city": "osaka", "area": "OU", "cat": "food", "tags": ["neoverene"], "note": "Tu som nebol, ale vyzera to mega.", "url": "https://maps.app.goo.gl/L4p3u2pukaGKMP2r5", "lat": 34.7027407, "lng": 135.4915664, "code": "OU-01", "short": "Tu som nebol, ale vyzera to mega.", "offmap": false}, {"id": "XMdx9LYJukfgYFQJ9", "name": "Dekasan egg sandwich", "city": "osaka", "area": "ON", "cat": "sweet", "tags": [], "note": "Tieto egg sandwiche su legendarne v Japonsku a toto je brutal.", "url": "https://maps.app.goo.gl/XMdx9LYJukfgYFQJ9", "lat": 34.6697236, "lng": 135.5118796, "code": "ON-07", "short": "Tieto egg sandwiche su legendarne v Japonsku a toto je brutal.", "offmap": false}, {"id": "sqwL5Vo3THhKe48MA", "name": "Harukas 300", "city": "osaka", "area": "OS", "cat": "view", "tags": [], "note": "Toto je rozhladna s vyhladom na Osaku. Ak sa da, tak sa oplati pozriet, ak maju volne miesta.", "url": "https://maps.app.goo.gl/sqwL5Vo3THhKe48MA", "lat": 34.6463062, "lng": 135.5133091, "code": "OS-02", "short": "Toto je rozhladna s vyhladom na Osaku.", "offmap": false}, {"id": "FjR2zSPrijdnwV759", "name": "Round1 Stadium Sennichimae", "city": "osaka", "area": "ON", "cat": "fun", "tags": [], "note": "Toto je giganticka herna.", "url": "https://maps.app.goo.gl/FjR2zSPrijdnwV759", "lat": 34.667511, "lng": 135.502862, "code": "ON-08", "short": "Toto je giganticka herna.", "offmap": false}], "routes": [{"id": "harajuku", "city": "tokyo", "badge": "Linka 1", "time": "pol dna+ · pešo", "title": "Shibuya → Harajuku → Meiji Jingu", "why": "Zo Shibuye sa da prejst pesi az do Harajuku. Na Harajuku si dajte aspon pol dna, za mna najlepsia cast Tokya.", "stops": ["Ebxz7kHA2TdB6n6p8", "465vxNWfFSXRF75z9", "w7VUu4ZUG62ssiVe8", "RwjHJx6KoTA7uzFV7", "CL2Euch5Nj496RyW9", "rT2arH1WcXHxzgd8A", "54CMtuSCbrA7nk9D6"]}, {"id": "shibuya", "city": "tokyo", "badge": "Linka 2", "time": "podvečer → noc", "title": "Shibuya okolo križovatky", "why": "Vsetko je na skok od Shibuya Crossing. Sky na zapad slnka (ak mate listky), potom krizovatka z Mag's Parku, Donki a drink.", "stops": ["shibuyasky", "magspark", "Bn1Qz1gurXfQjKoB9", "barpiano", "celavi"]}, {"id": "shinjuku-noc", "city": "tokyo", "badge": "Linka 3", "time": "večer · pešo", "title": "Shinjuku večer", "why": "Hlavne musite ist vecer. Yokocho, Kabukicho, Golden Gai, sipky a pachinko su par minut od seba.", "stops": ["6RRpVyTx1H6cbzK5A", "PeX7GiENsAJ64Bru7", "VrUciSwQLFLWkQHw8", "7TktssjErUWCgfAw9", "wALi5cZDiZimxMek6"]}, {"id": "shinjuku-den", "city": "tokyo", "badge": "Linka 4", "time": "cez deň · najlepšie na jeseň", "title": "Výhľad zadarmo, park a ginkgo aleja", "why": "Najprv vyhlad z vladnej budovy (zadarmo), potom Shinjuku Garden a na jesen zlta ginkgo ulica s autami.", "stops": ["tQ8xrq8J6kQ6DVzB7", "d17PK7zy8BAMSnrAA", "TU8gx6LSZ86Ao5AJ7"]}, {"id": "roppongi", "city": "tokyo", "badge": "Linka 5", "time": "poobede → večer", "title": "Hie Shrine, autá, uhor a teamLab", "why": "Cervene stlpy ako v Kyote rovno v Tokyu, hned vedla showroom aut. Potom Roppongi, uhor a teamLab spojeny s vyhladom na Tokyo Tower zadarmo.", "stops": ["VmyzaV6NkmcXBcEE6", "1swn5WsSpBCoLbDT9", "JfUfyZssmFJ49jL37", "jZToMihq8iYik6fW7", "nnHeE8j7tVexdJzP9"]}, {"id": "asakusa", "city": "tokyo", "badge": "Linka 6", "time": "pol dňa · metro medzi", "title": "Asakusa → Akihabara", "why": "Asakusa chram (vyvestit si z paliciek!), okonomiyaki hned vedla, potom Akihabara a garaz s tunerskymi autami.", "stops": ["fJvGw9zapa2oDLYq6", "QfJV8SKDu9MrjGAR6", "hgqchZ1QtwogeBLp6", "ZXSD3GpHFKxqAmu27"]}, {"id": "kamakura", "city": "kamakura", "badge": "Výlet", "time": "celý deň · ~1:30 z Tokya", "title": "Kamakura a Enoshima", "why": "Cajovna v bambusovom lese stihnite do 17. Socha Budhu a chramy, a na koniec restika s vyhladom na Fuji, ked je pekny den.", "stops": ["SzzVCziW3mYX9A4f9", "M5Zw7bHnpuH4YdYy6", "aE5m4ebVuk9LPtpg8"]}, {"id": "higashiyama", "city": "kyoto", "badge": "Linka 1", "time": "pol dňa · pešo", "title": "Kiyomizu-dera, pagoda a rooftop", "why": "Klasiky, co treba vidiet, su par minut od seba. Kava v zahradke a na zaver roofbar (rezervujte!).", "stops": ["ZQ7hUvpJShPyfALe7", "Bnyo8Rpg8oYzUFLq5", "hxyhKk7v6W52XRhEA", "X1FDDZvm3tcWEUnP6"]}, {"id": "nara", "city": "nara", "badge": "Výlet", "time": "pol dňa", "title": "Srnky, botanická a záhrada", "why": "Nara je na pol dna so srnkami. Botanicka a zahrada hned vedla srniek su fakt pekne, aj ked prsi.", "stops": ["tSCUHaKQUw1ttTyr6", "FFovNjT19KKnG7ze6"]}, {"id": "osaka-hrad", "city": "osaka", "badge": "Linka 1", "time": "podvečer", "title": "Hrad a nenápadný rooftop", "why": "Hrad treba vidiet, ale moj tip je rooftop bar hned vedla s vyhladom rovno na hrad. Vacsina ludi to obide.", "stops": ["JndW1TQfY9XtoP1t6"]}, {"id": "osaka-namba", "city": "osaka", "badge": "Linka 2", "time": "večer · jedlo", "title": "Dotonbori na jedlo", "why": "Osaka je hlavne na jedlo. Tulat sa po Dotonbori, okonomiyaki, takoyaki z ulice a cheesecake na zaver.", "stops": ["H4Aun9VTAuXwB52J7", "fQdGnSyk2YUFdFgz5", "pGm4VZJkLFxXwxqh6", "2XB9ELjYEj36V2dj9"]}], "tips": {"mine": [{"i": "🖼️", "t": "V Japonsku sa naozaj bez obav da fungovat tak, ze clovek vidi plagat alebo obrazok a moze ist do tej restiky… neni sanca sa ojebat. Neni to ako u nas na Slovensku, kde bez kontroly Google Maps by som tam nevkrocil."}, {"i": "🍣", "t": "Sushi belt: beha to na takom pase a bud si clovek objedna masinou, alebo to uz tam putuje. To minimalne raz treba absolvovat."}, {"i": "🍲", "t": "Shabu shabu je japonska verzia hotpotu. Ak nie konkretnu restiku z mojich tipov, tak skusit niekde shabu shabu."}, {"i": "🥞", "t": "Japonske palacinky budu asi vsade, rady, to si treba zvyknut."}, {"i": "🛍️", "t": "Celkovo si na nakupy treba idealne usetrit cas."}, {"i": "🍳", "t": "Omurice je zaklad japonskej food culture, to musite dat."}], "practical": [{"i": "🚇", "t": "Suica alebo PASMO karta na metro aj vlaky, plati sa nou aj v obchodoch. Na iPhone sa da pridat priamo do Apple Wallet.", "l": "https://www.jreast.co.jp/multi/en/pass/suica.html"}, {"i": "🗺️", "t": "Google Maps v Japonsku perfektne navigujú MHD vrátane nástupíšť a východov zo stanice. Na veľkých staniciach sa oplatí pozerať číslo východu."}, {"i": "💴", "t": "Hotovosť sa stále hodí (menšie reštiky, chrámy, automaty). Bankomaty v 7-Eleven berú zahraničné karty.", "l": "https://www.sevenbank.co.jp/intlcard/index2.html"}, {"i": "📶", "t": "eSIM si kúp ešte doma, nech máš dáta hneď po prílete."}, {"i": "🧾", "t": "Tax free: vo väčších obchodoch nad určitú sumu ukážeš pas a ušetríš daň. Pas nos so sebou, keď ideš nakupovať.", "l": "https://www.japan.travel/en/plan/japans-tax-exemption/"}, {"i": "🗑️", "t": "Smetné koše na ulici skoro nie sú, nos si sáčok. Sprepitné sa nedáva."}]}};
+const CATS = {
+  food:["🍜","Jedlo"], sushi:["🍣","Sushi"], sweet:["🍰","Sladké"], cafe:["🍵","Káva a čaj"],
+  bar:["🍸","Bary"], view:["🌇","Výhľady"], temple:["⛩️","Chrámy"], shop:["🛍️","Nákupy"],
+  park:["🌳","Parky"], fun:["🎯","Zábava"], cars:["🏎️","Autá"], area:["🏙️","Štvrte"],
+  landmark:["🏛️","Architektúra"], museum:["🖼️","Múzeá"], transit:["🚇","Doprava"], trip:["🚆","Výlety"]
+};
+const $ = (s,el=document)=>el.querySelector(s);
+const esc = s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* ---------- ulozeny stav (len v tomto telefone) ---------- */
+const store = {
+  get(k,d){try{const v=localStorage.getItem("jp."+k);return v==null?d:JSON.parse(v)}catch(e){return d}},
+  set(k,v){try{localStorage.setItem("jp."+k,JSON.stringify(v))}catch(e){}}
+};
+const S = {
+  tab: store.get("tab","tipy"),
+  city: store.get("city","tokyo"),
+  area: null, cat: null, mustOnly:false, mine:false, q:"",
+  want: new Set(store.get("want",[])), done: new Set(store.get("done",[])),
+  here: null
+};
+const byId = Object.fromEntries(DATA.places.map(p=>[p.id,p]));
+const cityOf = id=>DATA.cities.find(c=>c.id===id);
+const areaOf = id=>DATA.areas[id];
+const routesOf = pid=>DATA.routes.filter(r=>r.stops.includes(pid));
+
+function toast(msg){const t=$("#toast");t.textContent=msg;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>t.hidden=true,2200)}
+
+/* ---------- vzdialenost ---------- */
+function km(a,b){const R=6371,r=Math.PI/180,dLa=(b.lat-a.lat)*r,dLo=(b.lng-a.lng)*r;
+  const x=Math.sin(dLa/2)**2+Math.cos(a.lat*r)*Math.cos(b.lat*r)*Math.sin(dLo/2)**2;return 2*R*Math.asin(Math.sqrt(x))}
+function fmtKm(d){return d<1?Math.round(d*1000/10)*10+" m":(d<10?d.toFixed(1):Math.round(d))+" km"}
+function walk(d){const m=Math.round(d*1000/75);return m<=1?"hneď vedľa":m<=25?`~${m} min pešo`:"radšej metrom"}
+
+/* ---------- google maps linky ---------- */
+function dirUrl(stops){
+  const pts=stops.map(id=>byId[id]).filter(Boolean);
+  if(pts.length<2) return pts[0]?pts[0].url:"#";
+  const ll=p=>`${p.lat},${p.lng}`;
+  const o=ll(pts[0]), d=ll(pts[pts.length-1]);
+  const w=pts.slice(1,-1).map(ll).join("|");
+  const far = pts.some((p,i)=>i&&km(pts[i-1],p)>2.5);
+  return `https://www.google.com/maps/dir/?api=1&origin=${o}&destination=${d}${w?"&waypoints="+encodeURIComponent(w):""}&travelmode=${far?"transit":"walking"}`;
+}
+
+/* ---------- mesta ---------- */
+function renderCities(){
+  const el=$("#cities");
+  el.innerHTML=DATA.cities.map(c=>{
+    const n=DATA.places.filter(p=>p.city===c.id).length;
+    return `<button class="city" style="--c:var(--${c.id})" data-city="${c.id}" aria-pressed="${S.city===c.id}"><span class="dot">${c.kanji[0]}</span>${esc(c.name)}<span class="n">${n}</span></button>`
+  }).join("");
+  el.onclick=e=>{const b=e.target.closest(".city");if(!b)return;S.city=b.dataset.city;S.area=null;S.here=null;store.set("city",S.city);renderCities();render();window.scrollTo({top:0})};
+}
+
+function stats(){
+  const all=DATA.places.length;
+  $("#stats").innerHTML=`<span><b>${all}</b> miest</span><span><b>${DATA.routes.length}</b> trás</span><span>⭐ <b>${S.want.size}</b> chcem ísť</span><span>✅ <b>${S.done.size}</b> navštívené</span>`;
+}
+
+/* ---------- TIPY ---------- */
+function filtered(){
+  const q=S.q.trim().toLowerCase();
+  let list=DATA.places.filter(p=>p.city===S.city);
+  if(S.area) list=list.filter(p=>p.area===S.area);
+  if(S.cat) list=list.filter(p=>p.cat===S.cat);
+  if(S.mustOnly) list=list.filter(p=>p.tags.some(t=>t==="must"||t==="hidden gem"));
+  if(S.mine) list=list.filter(p=>S.want.has(p.id));
+  if(q) list=list.filter(p=>(p.name+" "+p.note+" "+p.tags.join(" ")+" "+CATS[p.cat][1]).toLowerCase().includes(q));
+  return list;
+}
+function card(p){
+  const a=areaOf(p.area), c=cityOf(p.city), [emo,label]=CATS[p.cat];
+  const tags=p.tags.map(t=>`<span class="tag ${t==="must"?"must":t==="hidden gem"?"gem":""}">${t==="must"?"MUST":esc(t)}</span>`).join("");
+  const rs=routesOf(p.id).map(r=>`<button class="route-link" data-route="${r.id}">🚃 Súčasť trasy: ${esc(r.title)} →</button>`).join("");
+  const dist=S.here?`<span class="dist">${fmtKm(km(S.here,p))}</span>`:"";
+  const w=S.want.has(p.id), d=S.done.has(p.id);
+  return `<article class="card${d?" isdone":""}" id="p-${p.id}" style="--c:var(--${p.city})">
+    <div class="top"><div class="emo" aria-hidden="true">${emo}</div>
+      <div class="ttl"><h3>${esc(p.name)}</h3>
+        <div class="meta"><span class="st">${p.code}</span><span>${esc(a.name)} · ${label}</span>${dist}${tags}</div></div></div>
+    <p class="note">${esc(p.note)}</p>
+    ${rs}
+    <div class="actions">
+      <a class="btn maps" href="${esc(p.url)}" target="_blank" rel="noopener">📍 Otvoriť v Google Maps</a>
+      <button class="btn tog want" data-want="${p.id}" aria-pressed="${w}" aria-label="Chcem ísť">⭐</button>
+      <button class="btn tog done" data-done="${p.id}" aria-pressed="${d}" aria-label="Bol som tam">✅</button>
+    </div></article>`;
+}
+function renderTipy(){
+  const city=cityOf(S.city);
+  const areas=[...new Set(DATA.places.filter(p=>p.city===S.city).map(p=>p.area))];
+  const cats=[...new Set(DATA.places.filter(p=>p.city===S.city).map(p=>p.cat))];
+  let list=filtered();
+  if(S.here) list=[...list].sort((a,b)=>km(S.here,a)-km(S.here,b));
+  let body="";
+  if(!list.length) body=`<div class="empty">Nič také tu nie je. Skús zrušiť filter.</div>`;
+  else if(S.here) body=`<div class="areahead"><h2>Najbližšie k tebe</h2><span class="cnt">${list.length}</span></div><div class="list">${list.map(card).join("")}</div>`;
+  else body=areas.filter(a=>list.some(p=>p.area===a)).map(a=>{
+      const ps=list.filter(p=>p.area===a), ar=areaOf(a);
+      return `<section><div class="areahead" style="--c:var(--${S.city})"><span class="code">${a}</span><h2>${esc(ar.name)}</h2><span class="cnt">${ps.length}</span></div>
+      ${ar.note?`<p class="note" style="margin:-4px 0 10px">${esc(ar.note)}</p>`:""}
+      <div class="list">${ps.map(card).join("")}</div></section>`}).join("");
+  $("#view").innerHTML=`
+  <div class="filters">
+    <div class="search"><input id="q" type="search" placeholder="Hľadať: ramen, rooftop, zadarmo…" value="${esc(S.q)}" aria-label="Hľadať">
+      <button class="near" id="near">${S.here?"✕ Zrušiť":"📍 Pri mne"}</button></div>
+    <div class="row" id="areas">${areas.map(a=>`<button class="chip area" style="--c:var(--${S.city})" data-area="${a}" aria-pressed="${S.area===a}">${esc(areaOf(a).name)}</button>`).join("")}</div>
+    <div class="row" id="cats">
+      <button class="chip" data-must aria-pressed="${S.mustOnly}">🔥 Must &amp; gems</button>
+      <button class="chip" data-mine aria-pressed="${S.mine}">⭐ Moje</button>
+      ${cats.map(c=>`<button class="chip" data-cat="${c}" aria-pressed="${S.cat===c}">${CATS[c][0]} ${CATS[c][1]}</button>`).join("")}</div>
+  </div>${body}`;
+  const q=$("#q");
+  q.oninput=()=>{S.q=q.value;const pos=q.selectionStart;renderTipy();const n=$("#q");n.focus();try{n.setSelectionRange(pos,pos)}catch(e){}};
+  $("#areas").onclick=e=>{const b=e.target.closest("[data-area]");if(!b)return;S.area=S.area===b.dataset.area?null:b.dataset.area;renderTipy()};
+  $("#cats").onclick=e=>{const b=e.target.closest("button");if(!b)return;
+    if(b.hasAttribute("data-must"))S.mustOnly=!S.mustOnly;else if(b.hasAttribute("data-mine"))S.mine=!S.mine;else S.cat=S.cat===b.dataset.cat?null:b.dataset.cat;renderTipy()};
+  $("#near").onclick=nearMe;
+}
+function nearMe(){
+  if(S.here){S.here=null;renderTipy();return}
+  if(!navigator.geolocation){toast("Poloha tu nie je dostupná, vyber si štvrť hore.");return}
+  toast("Zisťujem polohu…");
+  navigator.geolocation.getCurrentPosition(pos=>{
+    const here={lat:pos.coords.latitude,lng:pos.coords.longitude};
+    const near=DATA.cities.map(c=>({c,d:Math.min(...DATA.places.filter(p=>p.city===c.id).map(p=>km(here,p)))})).sort((a,b)=>a.d-b.d)[0];
+    if(near.d>60){toast("Si ďaleko od Japonska 🙂 Vyber si štvrť hore.");return}
+    S.here=here;S.city=near.c.id;S.area=null;renderCities();setTab("tipy");toast("Zoradené podľa vzdialenosti");
+  },()=>toast("Polohu sa nepodarilo zistiť. Vyber si štvrť hore."),{enableHighAccuracy:true,timeout:9000,maximumAge:60000});
+}
+
+/* ---------- TRASY ---------- */
+function renderTrasy(){
+  const rs=DATA.routes.filter(r=>r.city===S.city);
+  $("#view").innerHTML=`<div class="routes">${rs.length?rs.map(r=>{
+    const stops=r.stops.map(id=>byId[id]);
+    return `<article class="route" id="r-${r.id}" style="--c:var(--${r.city})"><header>
+      <div class="rt"><span class="line">${esc(r.badge)}</span><span class="by" style="font-size:12.5px;color:var(--muted)">${esc(r.time)}</span></div>
+      <h3>${esc(r.title)}</h3><p class="why">${esc(r.why)}</p></header>
+      <ol class="stops">${stops.map((p,i)=>`<li><span class="bub"></span><button data-goto="${p.id}">${CATS[p.cat][0]} ${esc(p.name)}<span class="sub">${esc(p.short)}</span></button>${i<stops.length-1?`<span class="leg">↓ ${walk(km(p,stops[i+1]))} · ${fmtKm(km(p,stops[i+1]))}</span>`:""}</li>`).join("")}</ol>
+      <a class="btn maps" href="${dirUrl(r.stops)}" target="_blank" rel="noopener">${r.stops.length>1?"🧭 Navigovať celú trasu v Google Maps":"📍 Otvoriť v Google Maps"}</a>
+    </article>`}).join(""):`<div class="empty">Pre toto mesto zatiaľ nemám trasu, pozri Tipy.</div>`}</div>`;
+}
+
+/* ---------- MAPA (vlastna, bez nacitavania dlazdic = rychle aj na datach) ---------- */
+let mapState=null;
+function renderMapa(){
+  const ps=DATA.places.filter(p=>p.city===S.city && !p.offmap);
+  const lat0=ps.reduce((s,p)=>s+p.lat,0)/ps.length, k=Math.cos(lat0*Math.PI/180);
+  const X=p=>p.lng*k*1000, Y=p=>-p.lat*1000;
+  const xs=ps.map(X), ys=ps.map(Y);
+  const pad=Math.max(Math.max(...xs)-Math.min(...xs),Math.max(...ys)-Math.min(...ys))*0.08+1.2;
+  const vb=[Math.min(...xs)-pad,Math.min(...ys)-pad,Math.max(...xs)-Math.min(...xs)+2*pad,Math.max(...ys)-Math.min(...ys)+2*pad];
+  const span=Math.max(vb[2],vb[3]);
+  const r=span/90;
+  const areas=[...new Set(ps.map(p=>p.area))];
+  const labels=areas.map(a=>{const q=ps.filter(p=>p.area===a);const cx=q.reduce((s,p)=>s+X(p),0)/q.length,cy=Math.min(...q.map(Y));
+    return `<text x="${cx}" y="${cy-r*3}" text-anchor="middle" class="al" style="font-size:${r*2.6}px">${esc(areaOf(a).name)}</text>`}).join("");
+  const routes=DATA.routes.filter(x=>x.city===S.city).map(x=>{const pts=x.stops.map(id=>byId[id]).filter(p=>p&&!p.offmap);
+    return `<polyline points="${pts.map(p=>X(p)+","+Y(p)).join(" ")}" fill="none" stroke="var(--${S.city})" stroke-opacity=".35" stroke-width="${r*0.9}" stroke-linecap="round" stroke-linejoin="round"/>`}).join("");
+  const dots=ps.map(p=>`<g class="pin" data-pin="${p.id}" transform="translate(${X(p)},${Y(p)})"><circle r="${r*1.55}" fill="var(--surface)" stroke="${p.tags.includes("must")?"var(--red)":"var(--"+S.city+")"}" stroke-width="${r*0.35}"/><text text-anchor="middle" dy="${r*0.55}" style="font-size:${r*1.5}px">${CATS[p.cat][0]}</text></g>`).join("");
+  const off=DATA.places.filter(p=>p.city===S.city&&p.offmap);
+  $("#view").innerHTML=`<div class="mapbox" id="mapbox">
+    <svg id="svg" viewBox="${vb.join(" ")}" role="img" aria-label="Mapa tipov">
+      <style>.al{fill:var(--muted);font-family:var(--display);opacity:.8}.pin{cursor:pointer}</style>
+      <rect x="${vb[0]-span}" y="${vb[1]-span}" width="${vb[2]+2*span}" height="${vb[3]+2*span}" fill="var(--surface)"/>
+      ${routes}${labels}${dots}
+    </svg>
+    <div class="zoom"><button id="zin" aria-label="Priblížiť">+</button><button id="zout" aria-label="Oddialiť">−</button></div>
+  </div>
+  <p class="maphint">Ťukni na bod a uvidíš môj tip. Mapu môžeš posúvať a zväčšovať. Čiary sú trasy, červený okraj = must.${off.length?` Mimo mapy: ${off.map(p=>esc(p.name)).join(", ")}.`:""}</p>
+  <div class="sheet" id="sheet"></div>`;
+  const svg=$("#svg");
+  mapState={vb:[...vb],base:[...vb]};
+  const apply=()=>svg.setAttribute("viewBox",mapState.vb.join(" "));
+  const zoom=(f,cx,cy)=>{const v=mapState.vb;cx=cx??v[0]+v[2]/2;cy=cy??v[1]+v[3]/2;
+    const nw=Math.min(Math.max(v[2]*f,mapState.base[2]/14),mapState.base[2]*1.5),nh=nw*v[3]/v[2];
+    mapState.vb=[cx-(cx-v[0])*nw/v[2],cy-(cy-v[1])*nh/v[3],nw,nh];apply()};
+  $("#zin").onclick=()=>zoom(.6);$("#zout").onclick=()=>zoom(1/.6);
+  const toSvg=(x,y)=>{const b=svg.getBoundingClientRect(),v=mapState.vb,s=Math.max(v[2]/b.width,v[3]/b.height);
+    return [v[0]+(x-b.left)*s-(b.width*s-v[2])/2, v[1]+(y-b.top)*s-(b.height*s-v[3])/2, s]};
+  const ptrs=new Map();let last=null,moved=0;
+  svg.addEventListener("pointerdown",e=>{svg.setPointerCapture(e.pointerId);ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});moved=0;last=null});
+  svg.addEventListener("pointermove",e=>{if(!ptrs.has(e.pointerId))return;const prev=ptrs.get(e.pointerId);ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(ptrs.size===1){const [,,s]=toSvg(0,0);mapState.vb[0]-=(e.clientX-prev.x)*s;mapState.vb[1]-=(e.clientY-prev.y)*s;moved+=Math.abs(e.clientX-prev.x)+Math.abs(e.clientY-prev.y);apply()}
+    else if(ptrs.size===2){const [a,b]=[...ptrs.values()];const d=Math.hypot(a.x-b.x,a.y-b.y);if(last){const [cx,cy]=toSvg((a.x+b.x)/2,(a.y+b.y)/2);zoom(last/d,cx,cy)}last=d;moved+=10}});
+  const up=e=>{ptrs.delete(e.pointerId);if(ptrs.size<2)last=null};
+  svg.addEventListener("pointerup",e=>{up(e);if(moved<8){const g=e.target.closest&&e.target.closest("[data-pin]");if(g)showSheet(g.dataset.pin)}});
+  svg.addEventListener("pointercancel",up);
+  svg.addEventListener("wheel",e=>{e.preventDefault();const [cx,cy]=toSvg(e.clientX,e.clientY);zoom(e.deltaY>0?1.15:1/1.15,cx,cy)},{passive:false});
+}
+function showSheet(id){$("#sheet").innerHTML=card(byId[id]);$("#sheet").scrollIntoView({behavior:"smooth",block:"nearest"})}
+
+/* ---------- INFO ---------- */
+function renderInfo(){
+  const ios=/iphone|ipad|ipod/i.test(navigator.userAgent), android=/android/i.test(navigator.userAgent);
+  const steps=ios?["Otvor tento link v <b>Safari</b>.","Ťukni na <b>Zdieľať</b> (štvorček so šípkou).","Vyber <b>Pridať na plochu</b> a potvrď."]
+    :["Otvor tento link v <b>Chrome</b>.","Ťukni na <b>⋮</b> vpravo hore.","Vyber <b>Pridať na plochu</b> / <b>Inštalovať aplikáciu</b>."];
+  $("#view").innerHTML=`<div class="info">
+    <section class="box install"><h2>📲 Daj si to na plochu</h2>
+      <ol>${steps.map(s=>`<li>${s}</li>`).join("")}</ol>
+      <button class="btn" id="inst" ${window.__bip?"":"hidden"}>Pridať na plochu jedným ťuknutím</button>
+      <p style="margin:10px 0 0;font-size:13px;opacity:.9">Hviezdičky ⭐ a fajky ✅ sa ukladajú len v tvojom telefóne.</p></section>
+    <section class="box"><h2>🇯🇵 Moje rady</h2><ul>${DATA.tips.mine.map(t=>`<li><span class="i">${t.i}</span><p>${esc(t.t)}</p></li>`).join("")}</ul></section>
+    <section class="box"><h2>🧹 Vynulovať</h2><p style="margin:0 0 10px;color:var(--muted)">Zmaže tvoje hviezdičky a fajky v tomto telefóne.</p>
+      <button class="chip" id="reset">Vymazať ⭐ a ✅</button> <span id="resetq" hidden>Naozaj? <button class="chip" id="resety">Áno, vymazať</button></span></section>
+  </div>`;
+  const ib=$("#inst");if(ib)ib.onclick=async()=>{const p=window.__bip;if(!p)return;p.prompt();await p.userChoice;window.__bip=null;ib.hidden=true};
+  $("#reset").onclick=()=>$("#resetq").hidden=false;
+  $("#resety").onclick=()=>{S.want.clear();S.done.clear();store.set("want",[]);store.set("done",[]);stats();toast("Vymazané");$("#resetq").hidden=true};
+}
+
+/* ---------- prepinanie ---------- */
+function setTab(t){S.tab=t;store.set("tab",t);document.querySelectorAll(".tab").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===t));render();window.scrollTo({top:0})}
+function render(){stats();({tipy:renderTipy,trasy:renderTrasy,mapa:renderMapa,info:renderInfo})[S.tab]()}
+document.querySelector(".tabs").onclick=e=>{const b=e.target.closest(".tab");if(b)setTab(b.dataset.tab)};
+
+/* klik na hviezdicku, fajku, trasu, zastavku */
+document.addEventListener("click",e=>{
+  const w=e.target.closest("[data-want]"),d=e.target.closest("[data-done]"),r=e.target.closest("[data-route]"),g=e.target.closest("[data-goto]");
+  if(w){const id=w.dataset.want;S.want.has(id)?S.want.delete(id):S.want.add(id);store.set("want",[...S.want]);w.setAttribute("aria-pressed",S.want.has(id));stats();toast(S.want.has(id)?"Pridané do ⭐ Moje":"Odobrané z ⭐ Moje")}
+  if(d){const id=d.dataset.done;S.done.has(id)?S.done.delete(id):S.done.add(id);store.set("done",[...S.done]);d.setAttribute("aria-pressed",S.done.has(id));d.closest(".card").classList.toggle("isdone",S.done.has(id));stats()}
+  if(r){const rt=DATA.routes.find(x=>x.id===r.dataset.route);S.city=rt.city;renderCities();setTab("trasy");const el=$("#r-"+rt.id);el&&el.scrollIntoView({block:"start"})}
+  if(g){const p=byId[g.dataset.goto];S.city=p.city;S.area=null;S.cat=null;S.q="";S.mustOnly=false;S.mine=false;renderCities();setTab("tipy");const el=$("#p-"+p.id);if(el){el.scrollIntoView({block:"center"});el.classList.add("flash");setTimeout(()=>el.classList.remove("flash"),1600)}}
+});
+
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();window.__bip=e;if(S.tab==="info")renderInfo()});
+
+if(!DATA.cities.some(c=>c.id===S.city))S.city=DATA.cities[0].id;
+if(!["tipy","trasy","mapa","info"].includes(S.tab))S.tab="tipy";
+renderCities();setTab(S.tab);
+
+if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}
+
+</script>
+</body>
+</html>
