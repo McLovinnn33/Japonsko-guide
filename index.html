@@ -98,8 +98,9 @@ a{color:inherit}
 .route-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--c);background:none;border:0;padding:0;cursor:pointer;text-align:left}
 .actions{display:flex;gap:8px}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:12px;padding:10px 12px;font-weight:700;font-size:14px;text-decoration:none;border:0;cursor:pointer}
-.btn.maps{flex:1;background:var(--ink);color:var(--bg)}
+.btn.maps{flex:1;min-width:0;white-space:nowrap;background:var(--ink);color:var(--bg)}
 .btn.tog{background:var(--chip);min-width:46px}
+.btn.photo{background:var(--chip);color:var(--ink);white-space:nowrap}
 .btn.tog[aria-pressed="true"].want{background:var(--gold);color:#fff}
 .btn.tog[aria-pressed="true"].done{background:var(--tokyo);color:#fff}
 .card.isdone{opacity:.62}
@@ -120,10 +121,18 @@ a{color:inherit}
 .stops li .bub{position:absolute;left:0;top:2px;width:22px;height:22px;border-radius:50%;background:var(--surface);border:4px solid var(--c)}
 .stops button{background:none;border:0;padding:0;text-align:left;cursor:pointer;font-weight:700;font-size:15px}
 .stops .sub{display:block;font-size:12.5px;color:var(--muted);font-weight:500}
+.srow{display:flex;align-items:flex-start;gap:8px}
+.sname{flex:1;min-width:0}
+.grip{flex:0 0 auto;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none;font-size:20px;line-height:1;color:var(--muted);padding:4px 8px;border-radius:8px;background:var(--chip)}
+.stops li.dragging{opacity:.85}
+.stops li.dragging .srow{background:var(--chip);border-radius:10px}
+.hint{margin:0;font-size:12.5px;color:var(--muted)}
+.linkbtn{background:none;border:0;padding:0;color:var(--red);font-weight:700;cursor:pointer;font-size:12.5px}
 .leg{display:block;font-size:12px;color:var(--muted);margin-top:2px}
 
 /* mapa */
 .mapbox{background:var(--surface);border-radius:18px;box-shadow:var(--shadow);overflow:hidden;position:relative;touch-action:none;margin-top:6px}
+.pin:hover circle{stroke-width:3}
 .mapbox svg{display:block;width:100%;height:min(68vh,560px);cursor:grab}
 .maphint{font-size:12.5px;color:var(--muted);margin:8px 2px}
 .zoom{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:6px}
@@ -215,6 +224,8 @@ function fmtKm(d){return d<1?Math.round(d*1000/10)*10+" m":(d<10?d.toFixed(1):Ma
 function walk(d){const m=Math.round(d*1000/75);return m<=1?"hneď vedľa":m<=25?`~${m} min pešo`:"radšej metrom"}
 
 /* ---------- google maps linky ---------- */
+const CITY_EN={tokyo:"Tokyo",kyoto:"Kyoto",osaka:"Osaka",nara:"Nara",kamakura:"Kamakura"};
+function photoUrl(p){return "https://www.google.com/search?tbm=isch&q="+encodeURIComponent(p.name.replace(/\(.*?\)/g,"")+" "+CITY_EN[p.city]+" Japan")}
 function dirUrl(stops){
   const pts=stops.map(id=>byId[id]).filter(Boolean);
   if(pts.length<2) return pts[0]?pts[0].url:"#";
@@ -264,7 +275,8 @@ function card(p){
     <p class="note">${esc(p.note)}</p>
     ${rs}
     <div class="actions">
-      <a class="btn maps" href="${esc(p.url)}" target="_blank" rel="noopener">📍 Otvoriť v Google Maps</a>
+      <a class="btn maps" href="${esc(p.url)}" target="_blank" rel="noopener">📍 Google Maps</a>
+      <a class="btn photo" href="${photoUrl(p)}" target="_blank" rel="noopener">📷 Fotky</a>
       <button class="btn tog want" data-want="${p.id}" aria-pressed="${w}" aria-label="Chcem ísť">⭐</button>
       <button class="btn tog done" data-done="${p.id}" aria-pressed="${d}" aria-label="Bol som tam">✅</button>
     </div></article>`;
@@ -313,17 +325,45 @@ function nearMe(){
 }
 
 /* ---------- TRASY ---------- */
+function orderOf(r){const o=store.get("order."+r.id,null);
+  if(Array.isArray(o)&&o.length===r.stops.length&&r.stops.every(s=>o.includes(s)))return o;return r.stops}
+function routeHtml(r){
+  const ids=orderOf(r), stops=ids.map(id=>byId[id]), custom=ids.join()!==r.stops.join(), many=stops.length>1;
+  return `<article class="route" id="r-${r.id}" data-rid="${r.id}" style="--c:var(--${r.city})"><header>
+    <div class="rt"><span class="line">${esc(r.badge)}</span><span style="font-size:12.5px;color:var(--muted)">${esc(r.time)}</span></div>
+    <h3>${esc(r.title)}</h3><p class="why">${esc(r.why)}</p></header>
+    ${many?`<p class="hint">Poradie si posuň podľa seba: chyť <b>⠿</b> a ťahaj hore alebo dole.${custom?` <button class="linkbtn" data-reset="${r.id}">Vrátiť pôvodné</button>`:""}</p>`:""}
+    <ol class="stops">${stops.map((p,i)=>`<li data-sid="${p.id}"><span class="bub"></span>
+      <div class="srow"><button class="sname" data-goto="${p.id}">${CATS[p.cat][0]} ${esc(p.name)}<span class="sub">${esc(p.short)}</span></button>
+      ${many?`<span class="grip" aria-label="Posunúť" title="Ťahaj pre zmenu poradia">⠿</span>`:""}</div>
+      ${i<stops.length-1?`<span class="leg">↓ ${walk(km(p,stops[i+1]))} · ${fmtKm(km(p,stops[i+1]))}</span>`:""}</li>`).join("")}</ol>
+    <a class="btn maps" href="${dirUrl(ids)}" target="_blank" rel="noopener">${many?"🧭 Navigovať celú trasu v Google Maps":"📍 Otvoriť v Google Maps"}</a>
+  </article>`;
+}
 function renderTrasy(){
   const rs=DATA.routes.filter(r=>r.city===S.city);
-  $("#view").innerHTML=`<div class="routes">${rs.length?rs.map(r=>{
-    const stops=r.stops.map(id=>byId[id]);
-    return `<article class="route" id="r-${r.id}" style="--c:var(--${r.city})"><header>
-      <div class="rt"><span class="line">${esc(r.badge)}</span><span class="by" style="font-size:12.5px;color:var(--muted)">${esc(r.time)}</span></div>
-      <h3>${esc(r.title)}</h3><p class="why">${esc(r.why)}</p></header>
-      <ol class="stops">${stops.map((p,i)=>`<li><span class="bub"></span><button data-goto="${p.id}">${CATS[p.cat][0]} ${esc(p.name)}<span class="sub">${esc(p.short)}</span></button>${i<stops.length-1?`<span class="leg">↓ ${walk(km(p,stops[i+1]))} · ${fmtKm(km(p,stops[i+1]))}</span>`:""}</li>`).join("")}</ol>
-      <a class="btn maps" href="${dirUrl(r.stops)}" target="_blank" rel="noopener">${r.stops.length>1?"🧭 Navigovať celú trasu v Google Maps":"📍 Otvoriť v Google Maps"}</a>
-    </article>`}).join(""):`<div class="empty">Pre toto mesto zatiaľ nemám trasu, pozri Tipy.</div>`}</div>`;
+  $("#view").innerHTML=`<div class="routes">${rs.length?rs.map(routeHtml).join(""):`<div class="empty">Pre toto mesto zatiaľ nemám trasu, pozri Tipy.</div>`}</div>`;
 }
+function rerenderRoute(rid){const r=DATA.routes.find(x=>x.id===rid),el=$("#r-"+rid);if(el)el.outerHTML=routeHtml(r)}
+/* tahanie zastavok - prst aj mys */
+let drag=null;
+document.addEventListener("pointerdown",e=>{
+  const g=e.target.closest(".grip");if(!g)return;
+  e.preventDefault();
+  const li=g.closest("li"),ol=li.parentElement;
+  drag={li,ol,id:e.pointerId,rid:li.closest(".route").dataset.rid};
+  li.classList.add("dragging");g.setPointerCapture(e.pointerId);
+});
+document.addEventListener("pointermove",e=>{
+  if(!drag||e.pointerId!==drag.id)return;
+  const sibs=[...drag.ol.children].filter(x=>x!==drag.li);
+  const after=sibs.find(x=>{const b=x.getBoundingClientRect();return e.clientY<b.top+b.height/2});
+  after?drag.ol.insertBefore(drag.li,after):drag.ol.appendChild(drag.li);
+});
+const endDrag=e=>{if(!drag||e.pointerId!==drag.id)return;
+  const order=[...drag.ol.children].map(x=>x.dataset.sid),rid=drag.rid;drag=null;
+  store.set("order."+rid,order);rerenderRoute(rid)};
+document.addEventListener("pointerup",endDrag);document.addEventListener("pointercancel",endDrag);
 
 /* ---------- MAPA (vlastna, bez nacitavania dlazdic = rychle aj na datach) ---------- */
 let mapState=null;
@@ -339,7 +379,7 @@ function renderMapa(){
   const areas=[...new Set(ps.map(p=>p.area))];
   const labels=areas.map(a=>{const q=ps.filter(p=>p.area===a);const cx=q.reduce((s,p)=>s+X(p),0)/q.length,cy=Math.min(...q.map(Y));
     return `<text x="${cx}" y="${cy-r*3}" text-anchor="middle" class="al" style="font-size:${r*2.6}px">${esc(areaOf(a).name)}</text>`}).join("");
-  const routes=DATA.routes.filter(x=>x.city===S.city).map(x=>{const pts=x.stops.map(id=>byId[id]).filter(p=>p&&!p.offmap);
+  const routes=DATA.routes.filter(x=>x.city===S.city).map(x=>{const pts=orderOf(x).map(id=>byId[id]).filter(p=>p&&!p.offmap);
     return `<polyline points="${pts.map(p=>X(p)+","+Y(p)).join(" ")}" fill="none" stroke="var(--${S.city})" stroke-opacity=".35" stroke-width="${r*0.9}" stroke-linecap="round" stroke-linejoin="round"/>`}).join("");
   const dots=ps.map(p=>`<g class="pin" data-pin="${p.id}" transform="translate(${X(p)},${Y(p)})"><circle r="${r*1.55}" fill="var(--surface)" stroke="${p.tags.includes("must")?"var(--red)":"var(--"+S.city+")"}" stroke-width="${r*0.35}"/><text text-anchor="middle" dy="${r*0.55}" style="font-size:${r*1.5}px">${CATS[p.cat][0]}</text></g>`).join("");
   const off=DATA.places.filter(p=>p.city===S.city&&p.offmap);
@@ -363,12 +403,13 @@ function renderMapa(){
   const toSvg=(x,y)=>{const b=svg.getBoundingClientRect(),v=mapState.vb,s=Math.max(v[2]/b.width,v[3]/b.height);
     return [v[0]+(x-b.left)*s-(b.width*s-v[2])/2, v[1]+(y-b.top)*s-(b.height*s-v[3])/2, s]};
   const ptrs=new Map();let last=null,moved=0;
-  svg.addEventListener("pointerdown",e=>{svg.setPointerCapture(e.pointerId);ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});moved=0;last=null});
+  let downPin=null;
+  svg.addEventListener("pointerdown",e=>{const gp=e.target.closest&&e.target.closest("[data-pin]");downPin=gp?gp.dataset.pin:null;svg.setPointerCapture(e.pointerId);ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});moved=0;last=null});
   svg.addEventListener("pointermove",e=>{if(!ptrs.has(e.pointerId))return;const prev=ptrs.get(e.pointerId);ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
     if(ptrs.size===1){const [,,s]=toSvg(0,0);mapState.vb[0]-=(e.clientX-prev.x)*s;mapState.vb[1]-=(e.clientY-prev.y)*s;moved+=Math.abs(e.clientX-prev.x)+Math.abs(e.clientY-prev.y);apply()}
     else if(ptrs.size===2){const [a,b]=[...ptrs.values()];const d=Math.hypot(a.x-b.x,a.y-b.y);if(last){const [cx,cy]=toSvg((a.x+b.x)/2,(a.y+b.y)/2);zoom(last/d,cx,cy)}last=d;moved+=10}});
   const up=e=>{ptrs.delete(e.pointerId);if(ptrs.size<2)last=null};
-  svg.addEventListener("pointerup",e=>{up(e);if(moved<8){const g=e.target.closest&&e.target.closest("[data-pin]");if(g)showSheet(g.dataset.pin)}});
+  svg.addEventListener("pointerup",e=>{up(e);if(moved<8&&downPin)showSheet(downPin);downPin=null});
   svg.addEventListener("pointercancel",up);
   svg.addEventListener("wheel",e=>{e.preventDefault();const [cx,cy]=toSvg(e.clientX,e.clientY);zoom(e.deltaY>0?1.15:1/1.15,cx,cy)},{passive:false});
 }
@@ -400,6 +441,7 @@ document.querySelector(".tabs").onclick=e=>{const b=e.target.closest(".tab");if(
 
 /* klik na hviezdicku, fajku, trasu, zastavku */
 document.addEventListener("click",e=>{
+  const rs=e.target.closest("[data-reset]");if(rs){store.set("order."+rs.dataset.reset,null);rerenderRoute(rs.dataset.reset);return}
   const w=e.target.closest("[data-want]"),d=e.target.closest("[data-done]"),r=e.target.closest("[data-route]"),g=e.target.closest("[data-goto]");
   if(w){const id=w.dataset.want;S.want.has(id)?S.want.delete(id):S.want.add(id);store.set("want",[...S.want]);w.setAttribute("aria-pressed",S.want.has(id));stats();toast(S.want.has(id)?"Pridané do ⭐ Moje":"Odobrané z ⭐ Moje")}
   if(d){const id=d.dataset.done;S.done.has(id)?S.done.delete(id):S.done.add(id);store.set("done",[...S.done]);d.setAttribute("aria-pressed",S.done.has(id));d.closest(".card").classList.toggle("isdone",S.done.has(id));stats()}
