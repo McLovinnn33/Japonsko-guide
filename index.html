@@ -160,8 +160,8 @@ button.food{cursor:pointer}
 
 /* spodna navigacia */
 .tabs{position:fixed;left:0;right:0;bottom:0;z-index:40;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
-.tabs nav{max-width:720px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
-.tab{border:0;background:none;padding:9px 4px 10px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11.5px;font-weight:700;color:var(--muted);cursor:pointer}
+.tabs nav{max-width:720px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr)}
+.tab{border:0;background:none;padding:9px 2px 10px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11.5px;font-weight:700;color:var(--muted);cursor:pointer}
 .tab .ic{font-size:20px;line-height:1.1;filter:grayscale(1);opacity:.75}
 .tab[aria-selected="true"]{color:var(--ink)}
 .tab[aria-selected="true"] .ic{filter:none;opacity:1}
@@ -176,6 +176,53 @@ button.food{cursor:pointer}
 .sheetbox input{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:12px;padding:13px 14px;font:inherit;font-size:17px}
 .sheetbox .btn{padding:13px}
 @media (min-width:600px){.modal{align-items:center}}
+.minor{display:flex;gap:8px;flex-wrap:wrap}
+.mini{border:0;background:none;padding:2px 0;font:inherit;font-size:13px;font-weight:700;color:var(--muted);text-decoration:none;cursor:pointer}
+.mini.on{color:var(--red)}
+.btn.soft{background:var(--chip);color:var(--ink);width:100%}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.two .btn{font-size:13px;padding:11px 8px;text-align:center}
+.plan{display:flex;flex-direction:column;gap:14px;margin-top:14px}
+.calhead{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.calhead h2{margin:0;font-family:var(--display);font-weight:400;font-size:22px}
+.calhead span{color:var(--muted);font-size:13px}
+.cal{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:8px}
+.day{border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:8px 6px 7px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;font-variant-numeric:tabular-nums}
+.day .wd{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.day .dn{font-size:15px;font-weight:800}
+.day .bar{display:flex;gap:2px;width:100%;height:6px}
+.day .bar i{flex:1;border-radius:3px;background:var(--line)}
+.day .cnt{font-size:12px;font-weight:700;color:var(--muted)}
+.day.free{background:transparent}
+.day[aria-pressed="true"]{border:2px solid var(--ink);box-shadow:var(--shadow)}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.ptime{flex:0 0 auto;width:96px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:4px 6px;font:inherit;font-size:13px}
+.xbtn{flex:0 0 auto;border:0;background:none;color:var(--muted);font-size:15px;padding:4px 6px;cursor:pointer}
+.loose{display:flex;flex-direction:column;gap:10px}
+.lrow{display:flex;align-items:center;gap:10px}
+.ldot{flex:0 0 10px;height:10px;border-radius:50%;background:var(--c)}
+.lname{flex:1;min-width:0;font-weight:700;font-size:14px}
+.lname small{display:block;font-weight:500;color:var(--muted);font-size:12px}
+.dates{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dates label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:700;color:var(--muted)}
+.dates input{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:12px;padding:11px;font:inherit;font-size:16px;min-width:0}
+.dates .btn{grid-column:1/-1}
+.cal.pick{max-height:50vh;overflow:auto}
+.newroute{display:flex;gap:8px}
+.newroute input{flex:1;min-width:0;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:12px;padding:10px 12px;font:inherit}
+.newroute .btn{flex:0 0 auto}
+.pplist{display:flex;flex-direction:column;gap:2px;max-height:48vh;overflow:auto;margin:0 -6px}
+.pprow{display:flex;align-items:center;gap:10px;border:0;background:none;color:var(--ink);text-align:left;padding:9px 6px;border-radius:10px;cursor:pointer;font:inherit}
+.pprow:hover{background:var(--chip)}
+.pprow b{font-size:18px;color:var(--muted)}
+.pprow.in b{color:var(--tokyo)}
+.ih{margin:0 0 6px;font-size:15px;color:#fff}
+.other{margin-top:12px;font-size:14px}
+.other summary{cursor:pointer;font-weight:700}
+.other ol{margin-top:6px}
+#ppq{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:12px;padding:11px 12px;font:inherit;font-size:16px}
+.noics [data-ics]{display:none}
 .toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 14px;border-radius:12px;font-size:14px;font-weight:600;z-index:50;max-width:calc(100% - 32px)}
 :focus-visible{outline:3px solid var(--red);outline-offset:2px}
 @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
@@ -197,10 +244,29 @@ button.food{cursor:pointer}
 <div class="tabs"><nav role="tablist" aria-label="Sekcie">
   <button class="tab" role="tab" data-tab="tipy" id="t-tipy"><span class="ic">📍</span>Tipy</button>
   <button class="tab" role="tab" data-tab="trasy" id="t-trasy"><span class="ic">🚃</span>Trasy</button>
+  <button class="tab" role="tab" data-tab="plan" id="t-plan"><span class="ic">📅</span>Plán</button>
   <button class="tab" role="tab" data-tab="mapa" id="t-mapa"><span class="ic">🗺️</span>Mapa</button>
   <button class="tab" role="tab" data-tab="info" id="t-info"><span class="ic">💡</span>Info</button>
 </nav></div>
 <div class="toast" id="toast" hidden></div>
+<div class="modal" id="daypick" hidden>
+  <div class="sheetbox">
+    <span class="kanji">予定 · PLÁN</span>
+    <h2 style="font-size:22px">Na ktorý deň?</h2>
+    <p id="picktitle"></p>
+    <div class="cal pick" id="pickdays"></div>
+    <button class="linkbtn" type="button" id="pickclose">Zrušiť</button>
+  </div>
+</div>
+<div class="modal" id="placepick" hidden>
+  <div class="sheetbox">
+    <span class="kanji">経路 · TRASA</span>
+    <h2 style="font-size:22px" id="pptitle">Pridať miesto</h2>
+    <input id="ppq" type="search" placeholder="Hľadať miesto…" aria-label="Hľadať miesto">
+    <div class="pplist" id="pplist"></div>
+    <button class="btn maps" type="button" id="ppdone">Hotovo</button>
+  </div>
+</div>
 <div class="modal" id="namebox" hidden>
   <form class="sheetbox" id="nameform">
     <span class="kanji">ようこそ · VITAJ</span>
@@ -238,7 +304,9 @@ const S = {
 const byId = Object.fromEntries(DATA.places.map(p=>[p.id,p]));
 const cityOf = id=>DATA.cities.find(c=>c.id===id);
 const areaOf = id=>DATA.areas[id];
-const routesOf = pid=>DATA.routes.filter(r=>r.stops.includes(pid));
+const myRoutes=()=>{const m=store.get("myroutes",[]);return Array.isArray(m)?m:[]};
+const allRoutes=()=>[...DATA.routes,...myRoutes()];
+const routesOf = pid=>allRoutes().filter(r=>orderOf(r).includes(pid));
 
 function toast(msg){const t=$("#toast");t.textContent=msg;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>t.hidden=true,2200)}
 
@@ -274,7 +342,7 @@ function renderCities(){
 function stats(){
   const all=DATA.places.length, nm=store.get("name","");
   const h=$("#hello");h.hidden=!nm;if(nm)h.innerHTML=`Ahoj <b>${esc(nm)}</b> 👋`;
-  $("#stats").innerHTML=`<span><b>${all}</b> miest</span><span><b>${DATA.routes.length}</b> trás</span><span>⭐ <b>${S.want.size}</b> chcem ísť</span><span>✅ <b>${S.done.size}/${all}</b> navštívené</span>`;
+  $("#stats").innerHTML=`<span><b>${all}</b> miest</span><span><b>${allRoutes().length}</b> trás</span><span>⭐ <b>${S.want.size}</b> chcem ísť</span><span>✅ <b>${S.done.size}/${all}</b> navštívené</span>`;
 }
 
 /* ---------- TIPY ---------- */
@@ -300,9 +368,9 @@ function card(p){
         <div class="meta"><span class="st">${p.code}</span><span>${esc(a.name)} · ${label}</span>${dist}${tags}</div></div></div>
     <p class="note">${esc(p.note)}</p>
     ${rs}
+    <div class="minor"><a class="mini" href="${photoUrl(p)}" target="_blank" rel="noopener">📷 Fotky</a><button class="mini${plannedDay(p.id)?" on":""}" data-plan="${p.id}">📅 ${plannedDay(p.id)?"V pláne: "+fmtDay(plannedDay(p.id)):"Do plánu"}</button></div>
     <div class="actions">
-      <a class="btn maps" href="${esc(p.url)}" target="_blank" rel="noopener">📍 Google Maps</a>
-      <a class="btn photo" href="${photoUrl(p)}" target="_blank" rel="noopener">📷 Fotky</a>
+      <a class="btn maps" href="${esc(p.url)}" target="_blank" rel="noopener">📍 Otvoriť v Google Maps</a>
       <button class="btn tog want" data-want="${p.id}" aria-pressed="${w}" aria-label="Chcem ísť">⭐</button>
       <button class="btn tog done" data-done="${p.id}" aria-pressed="${d}" aria-label="Bol som tam">✅</button>
     </div></article>`;
@@ -351,33 +419,44 @@ function nearMe(){
 }
 
 /* ---------- TRASY ---------- */
-function orderOf(r){const o=store.get("order."+r.id,null);
-  if(Array.isArray(o)&&o.length===r.stops.length&&r.stops.every(s=>o.includes(s)))return o;return r.stops}
+function orderOf(r){if(r.mine)return r.stops.filter(id=>byId[id]);
+  const o=store.get("order."+r.id,null);return Array.isArray(o)?o.filter(id=>byId[id]):r.stops}
+function setStops(r,ids){if(r.mine){const m=myRoutes();const x=m.find(y=>y.id===r.id);if(x){x.stops=ids;store.set("myroutes",m)}}
+  else store.set("order."+r.id,ids)}
 function routeHtml(r){
-  const ids=orderOf(r), stops=ids.map(id=>byId[id]), custom=ids.join()!==r.stops.join(), many=stops.length>1;
+  const ids=orderOf(r), stops=ids.map(id=>byId[id]), custom=!r.mine&&ids.join()!==r.stops.join(), many=stops.length>1;
   return `<article class="route" id="r-${r.id}" data-rid="${r.id}" style="--c:var(--${r.city})"><header>
-    <div class="rt"><span class="line">${esc(r.badge)}</span><span style="font-size:12.5px;color:var(--muted)">${esc(r.time)}</span></div>
-    <h3>${esc(r.title)}</h3><p class="why">${esc(r.why)}</p></header>
-    ${many?`<p class="hint">Poradie si posuň podľa seba: chyť <b>⠿</b> a ťahaj hore alebo dole.${custom?` <button class="linkbtn" data-reset="${r.id}">Vrátiť pôvodné</button>`:""}</p>`:""}
-    <ol class="stops">${stops.map((p,i)=>`<li data-sid="${p.id}"><span class="bub"></span>
+    <div class="rt"><span class="line">${esc(r.mine?"Moja trasa":r.badge)}</span>${r.time?`<span style="font-size:12.5px;color:var(--muted)">${esc(r.time)}</span>`:""}</div>
+    <h3>${esc(r.title)}</h3>${r.why?`<p class="why">${esc(r.why)}</p>`:""}</header>
+    ${stops.length?`<p class="hint">Je to tvoja trasa: ⠿ posunieš, ✕ odoberieš, + pridáš.${custom?` <button class="linkbtn" data-reset="${r.id}">Vrátiť pôvodné</button>`:""}</p>`:`<p class="hint">Zatiaľ prázdna. Pridaj prvé miesto.</p>`}
+    <ol class="stops" data-drag="route:${r.id}">${stops.map((p,i)=>`<li data-sid="${p.id}"><span class="bub"></span>
       <div class="srow"><button class="sname" data-goto="${p.id}">${CATS[p.cat][0]} ${esc(p.name)}<span class="sub">${esc(p.short)}</span></button>
+      <button class="xbtn" data-rstop="${r.id}|${p.id}" aria-label="Odobrať z trasy">✕</button>
       ${many?`<span class="grip" aria-label="Posunúť" title="Ťahaj pre zmenu poradia">⠿</span>`:""}</div>
       ${i<stops.length-1?`<span class="leg">↓ ${walk(km(p,stops[i+1]))} · ${fmtKm(km(p,stops[i+1]))}</span>`:""}</li>`).join("")}</ol>
-    <a class="btn maps" href="${dirUrl(ids)}" target="_blank" rel="noopener">${many?"🧭 Navigovať celú trasu v Google Maps":"📍 Otvoriť v Google Maps"}</a>
+    <button class="btn soft" data-raddp="${r.id}">＋ Pridať miesto do trasy</button>
+    ${stops.length?`<a class="btn maps" href="${dirUrl(ids)}" target="_blank" rel="noopener">${many?"🧭 Navigovať celú trasu v Google Maps":"📍 Otvoriť v Google Maps"}</a>
+    <button class="btn soft" data-planroute="${r.id}">📅 Pridať ${many?"celú trasu":""} do plánu</button>`:""}
+    ${r.mine?`<p style="margin:0"><button class="linkbtn" data-rdel="${r.id}">Zmazať túto trasu</button> <span data-rdelq="${r.id}" hidden>Naozaj? <button class="chip" data-rdely="${r.id}">Áno, zmazať</button></span></p>`:""}
   </article>`;
 }
 function renderTrasy(){
-  const rs=DATA.routes.filter(r=>r.city===S.city);
-  $("#view").innerHTML=`<div class="routes">${rs.length?rs.map(routeHtml).join(""):`<div class="empty">Pre toto mesto zatiaľ nemám trasu, pozri Tipy.</div>`}</div>`;
+  const rs=allRoutes().filter(r=>r.city===S.city);
+  $("#view").innerHTML=`<div class="routes">
+    <form class="newroute" id="newroute"><input id="nrname" maxlength="40" placeholder="Názov vlastnej trasy, napr. Deň v Shibuyi" aria-label="Názov novej trasy"><button class="btn maps" type="submit">＋ Vytvoriť</button></form>
+    ${rs.length?rs.map(routeHtml).join(""):`<div class="empty">Pre toto mesto zatiaľ nie je trasa. Vytvor si vlastnú.</div>`}</div>`;
+  $("#newroute").addEventListener("submit",e=>{e.preventDefault();const v=$("#nrname").value.trim();if(!v){$("#nrname").focus();return}
+    const m=myRoutes();const r={id:"my"+Date.now().toString(36),mine:true,city:S.city,title:v,badge:"",time:"",why:"",stops:[]};m.push(r);store.set("myroutes",m);
+    renderTrasy();openPlacePicker(r.id)});
 }
-function rerenderRoute(rid){const r=DATA.routes.find(x=>x.id===rid),el=$("#r-"+rid);if(el)el.outerHTML=routeHtml(r)}
+function rerenderRoute(rid){const r=allRoutes().find(x=>x.id===rid),el=$("#r-"+rid);if(el)el.outerHTML=routeHtml(r)}
 /* tahanie zastavok - prst aj mys */
 let drag=null;
 document.addEventListener("pointerdown",e=>{
   const g=e.target.closest(".grip");if(!g)return;
   e.preventDefault();
   const li=g.closest("li"),ol=li.parentElement;
-  drag={li,ol,id:e.pointerId,rid:li.closest(".route").dataset.rid};
+  drag={li,ol,id:e.pointerId,key:ol.dataset.drag||""};
   li.classList.add("dragging");g.setPointerCapture(e.pointerId);
 });
 document.addEventListener("pointermove",e=>{
@@ -387,8 +466,9 @@ document.addEventListener("pointermove",e=>{
   after?drag.ol.insertBefore(drag.li,after):drag.ol.appendChild(drag.li);
 });
 const endDrag=e=>{if(!drag||e.pointerId!==drag.id)return;
-  const order=[...drag.ol.children].map(x=>x.dataset.sid),rid=drag.rid;drag=null;
-  store.set("order."+rid,order);rerenderRoute(rid)};
+  const order=[...drag.ol.children].map(x=>x.dataset.sid),[kind,key]=drag.key.split(":");drag=null;
+  if(kind==="route"){const r=allRoutes().find(x=>x.id===key);if(r)setStops(r,order);rerenderRoute(key)}
+  else if(kind==="day"){const m=Object.fromEntries(dayItems(key).map(x=>[x.id,x]));PLAN.days[key]=order.map(id=>m[id]).filter(Boolean);savePlan();renderPlan()}};
 document.addEventListener("pointerup",endDrag);document.addEventListener("pointercancel",endDrag);
 
 /* ---------- MAPA (vlastna, bez nacitavania dlazdic = rychle aj na datach) ---------- */
@@ -405,7 +485,7 @@ function renderMapa(){
   const areas=[...new Set(ps.map(p=>p.area))];
   const labels=areas.map(a=>{const q=ps.filter(p=>p.area===a);const cx=q.reduce((s,p)=>s+X(p),0)/q.length,cy=Math.min(...q.map(Y));
     return `<text x="${cx}" y="${cy-r*3}" text-anchor="middle" class="al" style="font-size:${r*2.6}px">${esc(areaOf(a).name)}</text>`}).join("");
-  const routes=DATA.routes.filter(x=>x.city===S.city).map(x=>{const pts=orderOf(x).map(id=>byId[id]).filter(p=>p&&!p.offmap);
+  const routes=allRoutes().filter(x=>x.city===S.city).map(x=>{const pts=orderOf(x).map(id=>byId[id]).filter(p=>p&&!p.offmap);
     return `<polyline points="${pts.map(p=>X(p)+","+Y(p)).join(" ")}" fill="none" stroke="var(--${S.city})" stroke-opacity=".35" stroke-width="${r*0.9}" stroke-linecap="round" stroke-linejoin="round"/>`}).join("");
   const dots=ps.map(p=>`<g class="pin" data-pin="${p.id}" transform="translate(${X(p)},${Y(p)})"><circle r="${r*1.55}" fill="var(--surface)" stroke="${p.tags.includes("must")?"var(--red)":"var(--"+S.city+")"}" stroke-width="${r*0.35}"/><text text-anchor="middle" dy="${r*0.55}" style="font-size:${r*1.5}px">${CATS[p.cat][0]}</text></g>`).join("");
   const off=DATA.places.filter(p=>p.city===S.city&&p.offmap);
@@ -443,12 +523,13 @@ function showSheet(id){$("#sheet").innerHTML=card(byId[id]);$("#sheet").scrollIn
 
 /* ---------- INFO ---------- */
 function renderInfo(){
-  const ios=/iphone|ipad|ipod/i.test(navigator.userAgent), android=/android/i.test(navigator.userAgent);
-  const steps=ios?["Otvor tento link v <b>Safari</b>.","Ťukni na <b>Zdieľať</b> (štvorček so šípkou).","Vyber <b>Pridať na plochu</b> a potvrď."]
-    :["Otvor tento link v <b>Chrome</b>.","Ťukni na <b>⋮</b> vpravo hore.","Vyber <b>Pridať na plochu</b> / <b>Inštalovať aplikáciu</b>."];
+  const ios=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1), android=/android/i.test(navigator.userAgent);
+  const iosSteps=["Otvor tento link v <b>Safari</b> (nie v Messengeri či Instagrame, tam daj ⋯ → Otvoriť v Safari).","Dole ťukni na <b>Zdieľať</b> (štvorček so šípkou hore).","Posuň sa nižšie a vyber <b>Pridať na plochu</b>, potom <b>Pridať</b>."];
+  const andSteps=["Otvor tento link v <b>Chrome</b>.","Ťukni na <b>⋮</b> vpravo hore.","Vyber <b>Pridať na plochu</b> alebo <b>Inštalovať aplikáciu</b>."];
+  const first=android?["🤖 Android",andSteps]:["🍎 iPhone (Safari)",iosSteps], second=android?["🍎 iPhone (Safari)",iosSteps]:["🤖 Android",andSteps];
   $("#view").innerHTML=`<div class="info">
     <section class="box install"><h2>📲 Daj si to na plochu</h2>
-      <ol>${steps.map(s=>`<li>${s}</li>`).join("")}</ol>
+      <h3 class="ih">${first[0]}</h3><ol>${first[1].map(s=>`<li>${s}</li>`).join("")}</ol><details class="other"><summary>${second[0]}</summary><ol>${second[1].map(s=>`<li>${s}</li>`).join("")}</ol></details>
       <button class="btn" id="inst" ${window.__bip?"":"hidden"}>Pridať na plochu jedným ťuknutím</button>
       <p style="margin:10px 0 0;font-size:13px;opacity:.9">Hviezdičky ⭐ a fajky ✅ sa ukladajú len v tvojom telefóne.</p></section>
     <section class="box"><h2>🍱 Jedlá, čo odporúčam</h2>
@@ -466,6 +547,128 @@ function renderInfo(){
   $("#resety").onclick=()=>{S.want.clear();S.done.clear();store.set("want",[]);store.set("done",[]);stats();toast("Vymazané");$("#resetq").hidden=true};
 }
 
+
+/* ---------- PLAN + KALENDAR ---------- */
+const WD=["Ne","Po","Ut","St","Št","Pi","So"], WDF=["nedeľa","pondelok","utorok","streda","štvrtok","piatok","sobota"];
+let PLAN=(()=>{const p=store.get("plan",null);return p&&typeof p==="object"&&p.days?p:{start:"",end:"",days:{}}})();
+function savePlan(){store.set("plan",PLAN)}
+const dParse=s=>{const [y,m,d]=s.split("-").map(Number);return new Date(Date.UTC(y,m-1,d))};
+const dStr=dt=>dt.toISOString().slice(0,10);
+function tripDays(){if(!PLAN.start||!PLAN.end)return[];const out=[];let d=dParse(PLAN.start);const e=dParse(PLAN.end);
+  for(let i=0;i<60&&d<=e;i++){out.push(dStr(d));d=new Date(d.getTime()+864e5)}return out}
+const dayItems=ds=>(PLAN.days[ds]||[]).filter(x=>byId[x.id]);
+const fmtDay=(ds,long)=>{const d=dParse(ds);return long?`${WDF[d.getUTCDay()]} ${d.getUTCDate()}. ${d.getUTCMonth()+1}.`:`${WD[d.getUTCDay()]} ${d.getUTCDate()}. ${d.getUTCMonth()+1}.`};
+function dayCities(ds){const c={};dayItems(ds).forEach(x=>{const k=byId[x.id].city;c[k]=(c[k]||0)+1});return Object.keys(c).sort((a,b)=>c[b]-c[a])}
+const plannedDay=id=>tripDays().find(ds=>dayItems(ds).some(x=>x.id===id));
+function addToDay(ds,ids){const list=PLAN.days[ds]||(PLAN.days[ds]=[]);let n=0;
+  ids.forEach(id=>{Object.keys(PLAN.days).forEach(k=>{if(k!==ds)PLAN.days[k]=PLAN.days[k].filter(x=>x.id!==id)});
+    if(!list.some(x=>x.id===id)){list.push({id,time:""});n++}});savePlan();return n}
+const miest=n=>n===1?"miesto":n>1&&n<5?"miesta":"miest";
+
+function datesForm(){return `<section class="box"><h2>📅 Kedy idete?</h2>
+  <p style="margin:0 0 12px;color:var(--muted)">Zadaj termín cesty a potom si do jednotlivých dní naklikáš miesta.</p>
+  <form id="datesform" class="dates"><label>Od<input type="date" id="pstart" value="${PLAN.start}" required></label>
+  <label>Do<input type="date" id="pend" value="${PLAN.end}" required></label>
+  <button class="btn maps" type="submit">Uložiť termín</button></form>
+  ${PLAN.start?`<button class="linkbtn" id="datescancel" style="margin-top:10px">Zrušiť</button>`:""}</section>`}
+
+function renderPlan(){
+  const days=tripDays();
+  if(!days.length||S.editDates){$("#view").innerHTML=`<div class="info">${datesForm()}</div>`;bindDates();return}
+  if(!S.day||!days.includes(S.day))S.day=days.find(ds=>dayItems(ds).length)||days[0];
+  const items=dayItems(S.day), ids=items.map(x=>x.id), cs=dayCities(S.day);
+  const loose=[...S.want].filter(id=>byId[id]&&!plannedDay(id));
+  const usedCities=[...new Set(days.flatMap(dayCities))];
+  const timed=items.filter(x=>x.time).length;
+  $("#view").innerHTML=`<div class="plan">
+  <div class="calhead"><h2>${fmtDay(days[0])} – ${fmtDay(days[days.length-1])}</h2><span>${days.length} dní · ${days.reduce((s,ds)=>s+dayItems(ds).length,0)} miest</span></div>
+  <div class="cal">${days.map(ds=>{const d=dParse(ds),c=dayCities(ds),n=dayItems(ds).length;
+    return `<button class="day${n?"":" free"}" data-day="${ds}" aria-pressed="${S.day===ds}"><span class="wd">${WD[d.getUTCDay()]}</span><span class="dn">${d.getUTCDate()}.${d.getUTCMonth()+1}.</span><span class="bar">${c.length?c.map(k=>`<i style="background:var(--${k})"></i>`).join(""):"<i></i>"}</span><span class="cnt">${n||"·"}</span></button>`}).join("")}</div>
+  ${usedCities.length?`<div class="legend">${usedCities.map(k=>`<span><i style="background:var(--${k})"></i>${esc(cityOf(k).name)}</span>`).join("")}</div>`:""}
+
+  <section class="route dayd" style="--c:var(--${cs[0]||"red"})">
+    <header><div class="rt"><span class="line">${esc(fmtDay(S.day,true))}</span>${cs.length?`<span style="font-size:12.5px;color:var(--muted)">${cs.map(k=>cityOf(k).name).join(" + ")}</span>`:""}</div></header>
+    ${items.length?`<p class="hint">Čas je nepovinný. Poradie zmeníš cez <b>⠿</b>.${timed>1?` <button class="linkbtn" data-sorttime>Zoradiť podľa času</button>`:""}</p>
+    <ol class="stops" data-drag="day:${S.day}">${items.map((x,i)=>{const p=byId[x.id],nx=items[i+1]&&byId[items[i+1].id];
+      return `<li data-sid="${p.id}" style="--c:var(--${p.city})"><span class="bub"></span>
+      <div class="srow"><input class="ptime" type="time" value="${esc(x.time||"")}" data-time="${p.id}" aria-label="Čas pre ${esc(p.name)}">
+      <button class="sname" data-goto="${p.id}">${CATS[p.cat][0]} ${esc(p.name)}<span class="sub">${esc(areaOf(p.area).name)}</span></button>
+      <button class="xbtn" data-rm="${p.id}" aria-label="Odobrať">✕</button><span class="grip" aria-label="Posunúť">⠿</span></div>
+      ${nx?`<span class="leg">↓ ${walk(km(p,nx))} · ${fmtKm(km(p,nx))}</span>`:""}</li>`}).join("")}</ol>
+    ${ids.length>1?`<a class="btn maps" href="${dirUrl(ids)}" target="_blank" rel="noopener">🧭 Navigovať celý deň v Google Maps</a>`:`<a class="btn maps" href="${esc(byId[ids[0]].url)}" target="_blank" rel="noopener">📍 Otvoriť v Google Maps</a>`}
+    <div class="two"><a class="btn soft" href="${icsHref([S.day])}" download="japonsko-${S.day}.ics" data-ics>🍎 Do kalendára v iPhone</a><a class="btn soft" href="${gcalUrl(S.day)}" target="_blank" rel="noopener">📆 Google Kalendár</a></div>`
+    :`<p class="empty" style="padding:14px 4px">Na tento deň zatiaľ nič. Pridaj trasu alebo ⭐ miesta nižšie, alebo ťukni na <b>📅 Do plánu</b> pri hocijakom tipe.</p>`}
+  </section>
+
+  ${loose.length?`<section class="box"><h2>⭐ Nezaradené (${loose.length})</h2><p class="hint" style="margin:-4px 0 10px">Tvoje hviezdičky, ktoré ešte nemajú deň.</p>
+    <div class="loose">${loose.map(id=>{const p=byId[id];return `<div class="lrow" style="--c:var(--${p.city})"><span class="ldot"></span><span class="lname">${CATS[p.cat][0]} ${esc(p.name)}<small>${esc(cityOf(p.city).name)} · ${esc(areaOf(p.area).name)}</small></span><button class="chip" data-addday="${id}">+ ${fmtDay(S.day)}</button></div>`}).join("")}</div></section>`:""}
+
+  <section class="box"><h2>🚃 Pridať celú trasu na ${fmtDay(S.day)}</h2><div class="foods">${allRoutes().map(r=>`<button class="food" data-addroute="${r.id}" style="border-left:4px solid var(--${r.city})">${esc(r.title)}</button>`).join("")}</div></section>
+
+  <section class="box"><h2>🗓️ Celá cesta</h2>
+    <div class="two"><a class="btn soft" href="${icsHref(days)}" download="japonsko-cesta.ics" data-ics>🍎 Celý plán do iPhone kalendára</a><button class="btn soft" id="editdates">Zmeniť termín</button></div>
+    <p class="hint" style="margin-top:10px">Na Androide alebo PC použi pri každom dni <b>📆 Google Kalendár</b>.</p>
+    <p style="margin:12px 0 0"><button class="linkbtn" id="clearplan">Vymazať celý plán</button> <span id="clearq" hidden>Naozaj? <button class="chip" id="cleary">Áno, vymazať</button></span></p>
+  </section></div>`;
+  $("#editdates").onclick=()=>{S.editDates=true;renderPlan()};
+  $("#clearplan").onclick=()=>$("#clearq").hidden=false;
+  $("#cleary").onclick=()=>{PLAN.days={};savePlan();toast("Plán vymazaný");renderPlan()};
+  const sel=$(`.day[aria-pressed="true"]`);if(sel)sel.scrollIntoView({block:"nearest",inline:"center"});
+}
+function bindDates(){
+  $("#datesform").addEventListener("submit",e=>{e.preventDefault();const a=$("#pstart").value,b=$("#pend").value;
+    if(!a||!b){toast("Vyplň oba dátumy");return}
+    if(b<a){toast("Koniec je skôr ako začiatok");return}
+    if((dParse(b)-dParse(a))/864e5>59){toast("Najviac 60 dní");return}
+    PLAN.start=a;PLAN.end=b;savePlan();S.editDates=false;S.day=null;toast("Termín uložený");renderPlan()});
+  const c=$("#datescancel");if(c)c.onclick=()=>{S.editDates=false;renderPlan()};
+}
+
+/* --- kalendar: .ics (iPhone) a Google --- */
+const icsEsc=s=>String(s).replace(/\\/g,"\\\\").replace(/;/g,"\;").replace(/,/g,"\\,").replace(/\r?\n/g,"\\n");
+function fold(l){let o="";while(l.length>70){o+=l.slice(0,70)+"\r\n ";l=l.slice(70)}return o+l}
+function dayText(ds){return dayItems(ds).map(x=>{const p=byId[x.id];return `${x.time?x.time+" ":""}${p.name}\n${p.note}\n${p.url}`}).join("\n\n")}
+function addMin(t,m){const [h,mm]=t.split(":").map(Number);let v=Math.min(h*60+mm+m,23*60+59);return String(Math.floor(v/60)).padStart(2,"0")+String(v%60).padStart(2,"0")}
+function icsText(list){
+  const L=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Japonsko guide//SK","CALSCALE:GREGORIAN","METHOD:PUBLISH","X-WR-CALNAME:Japonsko",
+   "BEGIN:VTIMEZONE","TZID:Asia/Tokyo","BEGIN:STANDARD","DTSTART:19700101T000000","TZOFFSETFROM:+0900","TZOFFSETTO:+0900","TZNAME:JST","END:STANDARD","END:VTIMEZONE"];
+  const stamp=new Date().toISOString().replace(/[-:]/g,"").slice(0,15)+"Z";
+  list.forEach(ds=>{const items=dayItems(ds);if(!items.length)return;
+    const d=ds.replace(/-/g,""),nd=dStr(new Date(dParse(ds).getTime()+864e5)).replace(/-/g,"");
+    L.push("BEGIN:VEVENT",`UID:den-${ds}@japonsko-guide`,`DTSTAMP:${stamp}`,`DTSTART;VALUE=DATE:${d}`,`DTEND;VALUE=DATE:${nd}`,
+      `SUMMARY:${icsEsc("Japonsko: "+dayCities(ds).map(k=>cityOf(k).name).join(" + ")+" ("+items.length+" "+miest(items.length)+")")}`,
+      `DESCRIPTION:${icsEsc(dayText(ds))}`,"TRANSP:TRANSPARENT","END:VEVENT");
+    items.filter(x=>x.time).forEach(x=>{const p=byId[x.id];
+      L.push("BEGIN:VEVENT",`UID:${ds}-${p.id}@japonsko-guide`,`DTSTAMP:${stamp}`,`DTSTART;TZID=Asia/Tokyo:${d}T${x.time.replace(":","")}00`,
+        `DTEND;TZID=Asia/Tokyo:${d}T${addMin(x.time,60)}00`,`SUMMARY:${icsEsc(p.name)}`,`LOCATION:${icsEsc(p.name)}`,
+        `DESCRIPTION:${icsEsc(p.note+"\n"+p.url)}`,`URL:${p.url}`,"END:VEVENT")})});
+  L.push("END:VCALENDAR");return L.map(fold).join("\r\n")}
+const icsHref=list=>"data:text/calendar;charset=utf-8,"+encodeURIComponent(icsText(list));
+function gcalUrl(ds){const items=dayItems(ds),d=ds.replace(/-/g,""),nd=dStr(new Date(dParse(ds).getTime()+864e5)).replace(/-/g,"");
+  let det=dayText(ds);if(det.length>1400)det=det.slice(0,1400)+"…";
+  return "https://calendar.google.com/calendar/render?action=TEMPLATE&text="+encodeURIComponent("Japonsko: "+dayCities(ds).map(k=>cityOf(k).name).join(" + "))+"&dates="+d+"/"+nd+"&details="+encodeURIComponent(det)}
+
+/* --- vyber dna (okno) --- */
+let pickIds=[];
+function openPicker(ids,label){
+  const days=tripDays();
+  if(!days.length){toast("Najprv si v Pláne nastav termín cesty");setTab("plan");return}
+  pickIds=ids;$("#picktitle").textContent=label;
+  $("#pickdays").innerHTML=days.map(ds=>{const c=dayCities(ds),n=dayItems(ds).length,d=dParse(ds);
+    return `<button class="day" data-pickday="${ds}"><span class="wd">${WD[d.getUTCDay()]}</span><span class="dn">${d.getUTCDate()}.${d.getUTCMonth()+1}.</span><span class="bar">${c.length?c.map(k=>`<i style="background:var(--${k})"></i>`).join(""):"<i></i>"}</span><span class="cnt">${n||"·"}</span></button>`}).join("");
+  $("#daypick").hidden=false}
+
+document.addEventListener("change",e=>{const ti=e.target.closest("[data-time]");if(!ti)return;
+  const it=(PLAN.days[S.day]||[]).find(x=>x.id===ti.dataset.time);if(it){it.time=ti.value;savePlan();renderPlan()}});
+/* --- pridavanie miest do trasy --- */
+let ppRoute=null;
+function openPlacePicker(rid){ppRoute=rid;const r=allRoutes().find(x=>x.id===rid);$("#pptitle").textContent="Pridať do: "+r.title;$("#ppq").value="";drawPP();$("#placepick").hidden=false}
+function drawPP(){const r=allRoutes().find(x=>x.id===ppRoute);if(!r)return;const have=new Set(orderOf(r)),q=$("#ppq").value.trim().toLowerCase();
+  let list=DATA.places.filter(p=>!q||(p.name+" "+p.note+" "+areaOf(p.area).name).toLowerCase().includes(q));
+  list.sort((a,b)=>(a.city===r.city?0:1)-(b.city===r.city?0:1));
+  $("#pplist").innerHTML=list.slice(0,60).map(p=>`<button class="pprow${have.has(p.id)?" in":""}" data-ppadd="${p.id}" style="--c:var(--${p.city})"><span class="ldot"></span><span class="lname">${CATS[p.cat][0]} ${esc(p.name)}<small>${esc(cityOf(p.city).name)} · ${esc(areaOf(p.area).name)}</small></span><b>${have.has(p.id)?"✓":"＋"}</b></button>`).join("")||`<p class="hint">Nič sa nenašlo.</p>`}
+$("#ppq").addEventListener("input",drawPP);
+$("#ppdone").onclick=()=>{$("#placepick").hidden=true;if(S.tab==="trasy")rerenderRoute(ppRoute)};
 /* ---------- meno ---------- */
 function askName(){const m=$("#namebox"),i=$("#nameinput");i.value=store.get("name","");m.hidden=false;setTimeout(()=>i.focus(),50)}
 function closeName(){$("#namebox").hidden=true;store.set("asked",true);stats();if(S.tab==="info")renderInfo()}
@@ -474,24 +677,42 @@ $("#nameskip").onclick=closeName;
 
 /* ---------- prepinanie ---------- */
 function setTab(t){S.tab=t;store.set("tab",t);document.querySelectorAll(".tab").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===t));render();window.scrollTo({top:0})}
-function render(){stats();({tipy:renderTipy,trasy:renderTrasy,mapa:renderMapa,info:renderInfo})[S.tab]()}
+function render(){stats();$("#cities").hidden=(S.tab==="plan"||S.tab==="info");({tipy:renderTipy,trasy:renderTrasy,plan:renderPlan,mapa:renderMapa,info:renderInfo})[S.tab]()}
 document.querySelector(".tabs").onclick=e=>{const b=e.target.closest(".tab");if(b)setTab(b.dataset.tab)};
 
 /* klik na hviezdicku, fajku, trasu, zastavku */
 document.addEventListener("click",e=>{
+  const pa=e.target.closest("[data-ppadd]");if(pa){const r=allRoutes().find(x=>x.id===ppRoute);const ids=orderOf(r),id=pa.dataset.ppadd;
+    setStops(r,ids.includes(id)?ids.filter(x=>x!==id):[...ids,id]);drawPP();return}
+  const ra=e.target.closest("[data-raddp]");if(ra){openPlacePicker(ra.dataset.raddp);return}
+  const rx=e.target.closest("[data-rstop]");if(rx){const [rid,id]=rx.dataset.rstop.split("|");const r=allRoutes().find(x=>x.id===rid);setStops(r,orderOf(r).filter(x=>x!==id));rerenderRoute(rid);return}
+  const rd=e.target.closest("[data-rdel]");if(rd){document.querySelector(`[data-rdelq="${rd.dataset.rdel}"]`).hidden=false;return}
+  const ry=e.target.closest("[data-rdely]");if(ry){store.set("myroutes",myRoutes().filter(x=>x.id!==ry.dataset.rdely));toast("Trasa zmazaná");renderTrasy();return}
+  if(e.target.id==="placepick"){$("#placepick").hidden=true;if(S.tab==="trasy")rerenderRoute(ppRoute);return}
+  const pl=e.target.closest("[data-plan]");if(pl){const p=byId[pl.dataset.plan];openPicker([p.id],p.name);return}
+  const pr=e.target.closest("[data-planroute]");if(pr){const r=allRoutes().find(x=>x.id===pr.dataset.planroute);openPicker(orderOf(r),"Trasa: "+r.title);return}
+  const pk=e.target.closest("[data-pickday]");if(pk){const n=addToDay(pk.dataset.pickday,pickIds);$("#daypick").hidden=true;S.day=pk.dataset.pickday;
+    toast(n?`Pridané na ${fmtDay(S.day)}`:`Už je na ${fmtDay(S.day)}`);render();return}
+  if(e.target.id==="pickclose"||e.target.id==="daypick"){$("#daypick").hidden=true;return}
+  const dy=e.target.closest("[data-day]");if(dy){S.day=dy.dataset.day;renderPlan();return}
+  const rm=e.target.closest("[data-rm]");if(rm){PLAN.days[S.day]=(PLAN.days[S.day]||[]).filter(x=>x.id!==rm.dataset.rm);savePlan();renderPlan();return}
+  const ad=e.target.closest("[data-addday]");if(ad){addToDay(S.day,[ad.dataset.addday]);toast(`Pridané na ${fmtDay(S.day)}`);renderPlan();return}
+  const ar=e.target.closest("[data-addroute]");if(ar){const r=allRoutes().find(x=>x.id===ar.dataset.addroute);const n=addToDay(S.day,orderOf(r));toast(n?`Pridaných ${n} ${miest(n)} na ${fmtDay(S.day)}`:"Táto trasa už v tom dni je");renderPlan();window.scrollTo({top:0,behavior:"smooth"});return}
+  if(e.target.closest("[data-sorttime]")){const it=dayItems(S.day);PLAN.days[S.day]=[...it.filter(x=>x.time).sort((a,b)=>a.time.localeCompare(b.time)),...it.filter(x=>!x.time)];savePlan();renderPlan();return}
   const fd=e.target.closest("[data-food]");if(fd){S.q=fd.dataset.food;S.area=null;S.cat=null;S.mustOnly=false;S.mine=false;S.here=null;const c=DATA.places.find(p=>(p.name+" "+p.note).toLowerCase().includes(S.q));if(c)S.city=c.city;renderCities();setTab("tipy");return}
-  const rs=e.target.closest("[data-reset]");if(rs){store.set("order."+rs.dataset.reset,null);rerenderRoute(rs.dataset.reset);return}
+  const rs=e.target.closest("[data-reset]");if(rs){try{localStorage.removeItem("jp.order."+rs.dataset.reset)}catch(_){};rerenderRoute(rs.dataset.reset);return}
   const w=e.target.closest("[data-want]"),d=e.target.closest("[data-done]"),r=e.target.closest("[data-route]"),g=e.target.closest("[data-goto]");
   if(w){const id=w.dataset.want;S.want.has(id)?S.want.delete(id):S.want.add(id);store.set("want",[...S.want]);w.setAttribute("aria-pressed",S.want.has(id));stats();toast(S.want.has(id)?"Pridané do ⭐ Moje":"Odobrané z ⭐ Moje")}
   if(d){const id=d.dataset.done;S.done.has(id)?S.done.delete(id):S.done.add(id);store.set("done",[...S.done]);d.setAttribute("aria-pressed",S.done.has(id));d.closest(".card").classList.toggle("isdone",S.done.has(id));stats()}
-  if(r){const rt=DATA.routes.find(x=>x.id===r.dataset.route);S.city=rt.city;renderCities();setTab("trasy");const el=$("#r-"+rt.id);el&&el.scrollIntoView({block:"start"})}
+  if(r){const rt=allRoutes().find(x=>x.id===r.dataset.route);S.city=rt.city;renderCities();setTab("trasy");const el=$("#r-"+rt.id);el&&el.scrollIntoView({block:"start"})}
   if(g){const p=byId[g.dataset.goto];S.city=p.city;S.area=null;S.cat=null;S.q="";S.mustOnly=false;S.mine=false;renderCities();setTab("tipy");const el=$("#p-"+p.id);if(el){el.scrollIntoView({block:"center"});el.classList.add("flash");setTimeout(()=>el.classList.remove("flash"),1600)}}
 });
 
 window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();window.__bip=e;if(S.tab==="info")renderInfo()});
 
 if(!DATA.cities.some(c=>c.id===S.city))S.city=DATA.cities[0].id;
-if(!["tipy","trasy","mapa","info"].includes(S.tab))S.tab="tipy";
+if(!["tipy","trasy","plan","mapa","info"].includes(S.tab))S.tab="tipy";
+try{if(window.claude&&location.protocol!=="file:"&&!/github\.io|pages\.dev/.test(location.host))document.body.classList.add("noics")}catch(e){}
 renderCities();setTab(S.tab);
 if(!store.get("name","")&&!store.get("asked",false))askName();
 
