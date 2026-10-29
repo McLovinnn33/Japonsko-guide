@@ -229,6 +229,7 @@ button.food{cursor:pointer}
 #ppq{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:12px;padding:11px 12px;font:inherit;font-size:16px}
 .noics [data-ics]{display:none}
 .mapbox.real{touch-action:auto}
+#lmap.darkmap .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) brightness(.9) contrast(.9)}
 #lmap{height:min(68vh,560px);width:100%;background:var(--chip)}
 .lpin{width:32px;height:32px;border-radius:50%;background:var(--surface);border:3px solid var(--a);display:grid;place-items:center;font-size:16px;line-height:1;box-shadow:0 1px 4px rgba(0,0,0,.3)}
 .lpin.tip{border-width:4px;box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--a)}
@@ -521,7 +522,8 @@ async function renderMapa(){
     if(LMAP){LMAP.remove();LMAP=null}
     const dark=matchMedia("(prefers-color-scheme: dark)").matches&&document.documentElement.dataset.theme!=="light"||document.documentElement.dataset.theme==="dark";
     LMAP=L.map("lmap",{zoomControl:true,attributionControl:true});
-    L.tileLayer(`https://{s}.basemaps.cartocdn.com/rastertiles/${dark?"dark_all":"voyager"}/{z}/{x}/{y}{r}.png`,{maxZoom:19,subdomains:"abcd",attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'}).addTo(LMAP);
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(LMAP);
+    $("#lmap").classList.toggle("darkmap",dark);
     const cl=L.markerClusterGroup({maxClusterRadius:42,disableClusteringAtZoom:16,showCoverageOnHover:false,spiderfyOnMaxZoom:true,
       iconCreateFunction:c=>L.divIcon({html:`<div class="lcl">${c.getChildCount()}</div>`,className:"",iconSize:[38,38]})});
     const byArea={};
